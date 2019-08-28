@@ -53,7 +53,7 @@ public class HandleGPSNIOReadThread extends Thread{
 				}
 				try {
 					handleRead(channel);
-					System.out.println("sleep 2s...");
+//					System.out.println("sleep 2s...");
 					Thread.sleep(2000);
 //					sleep(10);
 				} catch (Exception e) {
@@ -100,7 +100,7 @@ public class HandleGPSNIOReadThread extends Thread{
 			}
 			//断网检测----------------------
 			while (bytesRead > 0) {
-				long t1 = System.nanoTime();
+//				long t1 = System.nanoTime();
 				buffer.flip();
 				byte[] content = new byte[buffer.limit()];
 				buffer.get(content);
@@ -123,12 +123,12 @@ public class HandleGPSNIOReadThread extends Thread{
 //				if (t2-t1>1000000) {
 //					System.out.println("     GPS handle over..., --  -- "+(t2-t1)/1000000+"ms");
 //				}
-				System.out.println("     GPS handle over..., --  -- "+(t2-t1)/1000000+"ms");
-				t1 = 0;
-				t2 = 0; 
+//				System.out.println("     GPS handle over..., --  -- "+(t2-t1)/1000000+"ms");
+//				t1 = 0;
+//				t2 = 0; 
 				try {
 					bytesRead = channel.read(buffer);
-					System.out.println("GPS bytesRead -- "+bytesRead);
+//					System.out.println("GPS bytesRead -- "+bytesRead);
 				} catch (IOException e) {
 					e.printStackTrace();
 					bytesRead = -1;
@@ -148,7 +148,6 @@ public class HandleGPSNIOReadThread extends Thread{
 			flag = false;
 			dataServerNIO.removeKeyInReadSet(key);
 		}
-		System.out.println("handle read end...");
 	}
 	public boolean handleLines(String content) {
 		if(content == null )

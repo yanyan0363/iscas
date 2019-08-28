@@ -33,34 +33,32 @@ public class DataCache {
 	 * @return
 	 */
 	public boolean isTriggeredAsc() {
-		synchronized (myDataList) {
-			int size = myDataList.size();
-			if (size <= 0 || size < Config.ltw+2 ) {
-				return false;
+		int size = myDataList.size();
+		if (size <= 0 || size < Config.ltw+2 ) {
+			return false;
+		}
+		int i = (int)Math.ceil(Config.ltw);
+		while (i < size) {
+			DispWithMEMS dispWithMEMS = myDataList.get(i);
+			List<MEMSData> memsDataList = dispWithMEMS.memsDataList;
+			if (memsDataList == null || memsDataList.size() <= 0) {
+				i++;
+				continue;
 			}
-			int i = (int)Math.ceil(Config.ltw);
-			while (i < size) {
-				DispWithMEMS dispWithMEMS = myDataList.get(i);
-				List<MEMSData> memsDataList = dispWithMEMS.memsDataList;
-				if (memsDataList == null || memsDataList.size() <= 0) {
-					i++;
+			for (int j = 0; j < memsDataList.size(); j++) {
+				MEMSData memsData = memsDataList.get(j);
+				if (memsData.isTriggerCalculated()) {
 					continue;
-				}
-				for (int j = 0; j < memsDataList.size(); j++) {
-					MEMSData memsData = memsDataList.get(j);
-					if (memsData.isTriggerCalculated()) {
-						continue;
-					}else {//计算是否触发
-						memsData.setTriggerCalculated(true);
-						boolean ifSLTA = isSLTATriggered(memsData, i, j);
-						if (ifSLTA) {//P波初动
-							System.out.println("P波初动时刻: " + this.myStation.ID+"  "+StaticMetaData.formatMs.format(memsData.time));
-							return AICTrigger(memsData.time,i); 
-						}
+				}else {//计算是否触发
+					memsData.setTriggerCalculated(true);
+					boolean ifSLTA = isSLTATriggered(memsData, i, j);
+					if (ifSLTA) {//P波初动
+						System.out.println("P波初动时刻: " + this.myStation.ID+"  "+StaticMetaData.formatMs.format(memsData.time));
+						return AICTrigger(memsData.time,i); 
 					}
 				}
-				i++;
 			}
+			i++;
 		}
 		return false;
 	}
@@ -478,28 +476,34 @@ public class DataCache {
 		double Avg = 0.0;
 		for (MEMSData memsData : memsDataList) {
 			double vhf= memsData.getAccH();
-		    Avg = DoubleUtil.add(Avg, vhf);
+//		    Avg = DoubleUtil.add(Avg, vhf);
+			Avg += vhf;
 		}
-//		Avg = Avg/size;
 		if (size == 0) {
 			return 0;
 		}
-		Avg = DoubleUtil.div(Avg, (double)size, 2);
+//		Avg = DoubleUtil.div(Avg, (double)size, 2);
+		Avg = Avg/size;
 		double var = 0.0;
 		for (MEMSData memsData : memsDataList) {
-//			double v = Math.pow(memsData.getAccH()-Avg, 2);
-//			var+= v ;
-			double dd = DoubleUtil.sub(memsData.getAccH(), Avg);
-			double v = DoubleUtil.mul(dd, dd);
-			var = DoubleUtil.add(var, v);
+			double v = Math.pow(memsData.getAccH()-Avg, 2);
+			var+= v ;
+//			double dd = DoubleUtil.sub(memsData.getAccH(), Avg);
+//			double v = DoubleUtil.mul(dd, dd);
+//			var = DoubleUtil.add(var, v);
 		}
-//		var = var/size;
-		var = DoubleUtil.div(var, (double)size, 4);
+		var = var/size;
+//		var = DoubleUtil.div(var, (double)size, 4);
 		while (memsDataList != null && memsDataList.size() > 0) {
 			memsDataList.remove(0);
 		}
 		memsDataList = null;
-		return var;
+		if (var < Config.MEMS_Min_0) {
+			System.out.println(var);
+			return 0;
+		}else {
+			return var;
+		}
 	}
 	/**
 	 * 
@@ -867,7 +871,7 @@ public class DataCache {
 	 */
 	synchronized private void maintainMyDataListTimeWindow(){
 		synchronized (myDataList) {
-			System.out.println("maintainMyDataListTimeWindow before -- "+myStation.ID+" -- "+myDataList.size());
+//			System.out.println("maintainMyDataListTimeWindow before -- "+myStation.ID+" -- "+myDataList.size());
 			if (myDataList.size() <= 0) {
 				return;
 			}
@@ -888,8 +892,8 @@ public class DataCache {
 				else break ;
 			}
 			System.gc();
-			System.out.println("maintainMyDataListTimeWindow after -- "+myDataList.size());
-			System.out.println("maintainMyDataListTimeWindow 耗时  -- "+(System.nanoTime()/1000000-t3)+"ms");
+//			System.out.println("maintainMyDataListTimeWindow after -- "+myDataList.size());
+//			System.out.println("maintainMyDataListTimeWindow 耗时  -- "+(System.nanoTime()/1000000-t3)+"ms");
 			t2 = 0;
 			t3 = 0;
 		}

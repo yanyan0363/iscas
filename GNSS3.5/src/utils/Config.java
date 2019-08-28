@@ -84,6 +84,7 @@ public class Config {
 	public static boolean isGreen;
 	public static double Vs;
 	public static int MEMSHz;
+	public static double MEMS_Min_0;
 	static Properties prop = new Properties();
 	static { 
 //		PropertyConfigurator.configure("log4j.properties");
@@ -167,6 +168,7 @@ public class Config {
         	SNR = getDoubleProperty("SNR");
         	Vs = getDoubleProperty("Vs");
         	MEMSHz = getIntProperty("MEMSHz");
+        	MEMS_Min_0 = getDoubleProperty("MEMS_Min_0");
         } catch (IOException e) {   
             e.printStackTrace();   
         }   

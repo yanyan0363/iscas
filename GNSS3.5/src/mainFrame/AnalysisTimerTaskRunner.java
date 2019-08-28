@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.Timer;
 
 public class AnalysisTimerTaskRunner  {
-	public long defaultTimeTick = 5 ;
+	public long defaultTimeTick = 1000 ;
 	private Timer myTimer = new Timer();
 	public AnalysisTimerTaskRunner( ) {
 	 

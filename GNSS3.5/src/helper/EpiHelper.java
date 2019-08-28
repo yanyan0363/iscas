@@ -116,19 +116,19 @@ public class EpiHelper {
 		System.out.println("计算震中 B:"+B0+", L:"+L0+", v:"+v0);
 		System.out.println("计算震时："+ StaticMetaData.formatMs.format(EQTime));
 		//here start ---
-		B0 = B0%90;
-		L0 = L0%180;
-		if (B0 < 0) {
-			B0 = B0*(-1);
-		}
-		if (v0 < 0) {
-			v0 = v0*(-1);
-		}
-		System.out.println();
-		System.out.println("震中处理方式：B0 = B0%90;L0 = L0%180;");
-		System.out.println("处理后震中 B:"+B0+", L:"+L0);
-		this.EQTime = calEQT();
-		System.out.println("处理后震时："+ StaticMetaData.formatMs.format(EQTime));
+//		B0 = B0%90;
+//		L0 = L0%180;
+//		if (B0 < 0) {
+//			B0 = B0*(-1);
+//		}
+//		if (v0 < 0) {
+//			v0 = v0*(-1);
+//		}
+//		System.out.println();
+//		System.out.println("震中处理方式：B0 = B0%90;L0 = L0%180;");
+//		System.out.println("处理后震中 B:"+B0+", L:"+L0);
+//		this.EQTime = calEQT();
+//		System.out.println("处理后震时："+ StaticMetaData.formatMs.format(EQTime));
 		//here end ---
 //		SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss.SSS");
 //		double sum = 0;

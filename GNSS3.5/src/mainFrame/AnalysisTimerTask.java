@@ -21,7 +21,7 @@ public class AnalysisTimerTask extends TimerTask{
 	public AnalysisTimerTaskRunner myTask= null ;
 	@Override
 	public void run() {
-		long t1 = System.nanoTime()/1000000;
+//		long t1 = System.nanoTime()/1000000;
 		if(myTask == null )
 			return ;
 		try{
@@ -38,8 +38,8 @@ public class AnalysisTimerTask extends TimerTask{
 			System.out.println("timer evt worker error");
 			exp.printStackTrace();
 		}
-		long t2 = System.nanoTime()/1000000;
-		System.out.println("                                           AnalysisTimerTask 耗时 -- " + (t2-t1)+"ms");
+//		long t2 = System.nanoTime()/1000000;
+//		System.out.println("                                                                 AnalysisTimerTask 耗时 -- " + (t2-t1)+"ms");
 	
 		System.gc();
 	}
@@ -53,7 +53,8 @@ public class AnalysisTimerTask extends TimerTask{
 				continue;
 			}else{
 				//here changed, remember to get back!!!
-				if (curStation.myDataCache.isTriggeredDesc()) {
+//				if (curStation.myDataCache.isTriggeredDesc()) {
+				if (curStation.myDataCache.isTriggeredAsc()) {
 //				if(false){
 					curStation.isActive = true;
 					EQEvent event = EQEventHelper.evtBelongsTo(curStation.myDataCache.triggerTime, curStation);
@@ -91,14 +92,14 @@ public class AnalysisTimerTask extends TimerTask{
 				}
 			}
 
-			long t1 = System.nanoTime()/1000000;
+//			long t1 = System.nanoTime()/1000000;
 			if (curStation.isActive) {
 				continue;
 			}else {
 				curStation.myDataCache.maintainTimeWindow();
 			}
-			long t2 = System.nanoTime()/1000000;
-			System.out.println("       AnalysisTimerTask.runTickJob() maintainTimeWindow -- "+(t2-t1)+"ms");
+//			long t2 = System.nanoTime()/1000000;
+//			System.out.println("       AnalysisTimerTask.runTickJob() maintainTimeWindow -- "+(t2-t1)+"ms");
 		}
 	 
 		keys=null ;

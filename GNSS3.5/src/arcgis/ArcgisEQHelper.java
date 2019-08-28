@@ -49,7 +49,8 @@ public class ArcgisEQHelper {
 			IFeatureCursor featureCursor = featureClass.search(filter, false);
 			IFeature feature = null;
 			if ((feature=featureCursor.nextFeature())!=null) {
-				return feature.getValue(4)+"";
+				int idx = featureClass.findField("LAST_NAME9");
+				return feature.getValue(idx)+"";
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
