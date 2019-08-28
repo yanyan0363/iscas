@@ -1,0 +1,526 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x68716b0b, pid=15456, tid=0x000026b4
+#
+# JRE version: Java(TM) SE Runtime Environment (8.0_121-b13) (build 1.8.0_121-b13)
+# Java VM: Java HotSpot(TM) Client VM (25.121-b13 mixed mode windows-x86 )
+# Problematic frame:
+# C  [AfCore.dll+0x46b0b]
+#
+# Failed to write core dump. Minidumps are not enabled by default on client versions of Windows
+#
+# If you would like to submit a bug report, please visit:
+#   http://bugreport.java.com/bugreport/crash.jsp
+# The crash happened outside the Java Virtual Machine in native code.
+# See problematic frame for where to report the bug.
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x4de00000):  JavaThread "Thread-166" [_thread_in_native, id=9908, stack(0x4ebd0000,0x4ec20000)]
+
+siginfo: ExceptionCode=0xc0000005, reading address 0x00000000
+
+Registers:
+EAX=0x00000000, EBX=0x51c0dd30, ECX=0x53534500, EDX=0x00000000
+ESP=0x4ec1f0f0, EBP=0x4ec1f104, ESI=0xffffffff, EDI=0x00000000
+EIP=0x68716b0b, EFLAGS=0x00010286
+
+Top of Stack: (sp=0x4ec1f0f0)
+0x4ec1f0f0:   53534500 51c0dd18 00000200 00000000
+0x4ec1f100:   51c0dd30 4ec1f17c 7168fe79 53534500
+0x4ec1f110:   00000000 b0870052 00000001 485aee80
+0x4ec1f120:   00000000 536bfed0 00000200 0000000a
+0x4ec1f130:   5353ef9c 0000000c 00000000 51000b4e
+0x4ec1f140:   00000001 444f4e46 00005f45 4e000000
+0x4ec1f150:   00000000 0000000b 00000000 00000000
+0x4ec1f160:   00000000 b087006e 559fb721 4ec1f1d4 
+
+Instructions: (pc=0x68716b0b)
+0x68716aeb:   a7 29 04 00 83 c4 04 8b 45 fc 8b 00 89 07 ff 40
+0x68716afb:   f4 4e 3b 75 0c 7d ce 8b 7d 0c 8b 4d 08 8b 13 51
+0x68716b0b:   8b 0c ba e8 bd e2 ff ff 5f 5e 5b 8b e5 5d c2 08
+0x68716b1b:   00 cc cc cc cc 55 8b ec 51 8b 55 08 89 4d fc 85 
+
+
+Register to memory mapping:
+
+EAX=0x00000000 is an unknown value
+EBX=0x51c0dd30 is an unknown value
+ECX=0x53534500 is an unknown value
+EDX=0x00000000 is an unknown value
+ESP=0x4ec1f0f0 is pointing into the stack for thread: 0x4de00000
+EBP=0x4ec1f104 is pointing into the stack for thread: 0x4de00000
+ESI=0xffffffff is an unknown value
+EDI=0x00000000 is an unknown value
+
+
+Stack: [0x4ebd0000,0x4ec20000],  sp=0x4ec1f0f0,  free space=316k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [AfCore.dll+0x46b0b]
+C  0x7168fe79
+C  0x56a50359
+C  0x56a31ff3
+C  0x56a49c64
+C  0x56a487b9
+C  0x56a4c33f
+C  [ntvinv.dll+0x1e7c0]
+C  [ntvinv.dll+0x1f8ae]
+
+Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
+J 1847  com.esri.arcgis.interop.NativeObjRef.nativeVtblInvokeNative(Lcom/esri/arcgis/interop/Rpc;[BLjava/lang/String;ILjava/lang/String;[Lcom/esri/arcgis/interop/Param;[Ljava/lang/Object;I)V (0 bytes) @ 0x02726d22 [0x02726c50+0xd2]
+J 1846 C1 com.esri.arcgis.interop.NativeObjRef.a(Lcom/esri/arcgis/interop/Rpc;[BLjava/lang/String;ILjava/lang/String;[Lcom/esri/arcgis/interop/Param;[Ljava/lang/Object;I)V (115 bytes) @ 0x027e6c80 [0x027e6a10+0x270]
+J 1845 C1 com.esri.arcgis.interop.NativeObjRef.a(Lcom/esri/arcgis/interop/Rpc;Lcom/esri/arcgis/interop/Uuid;Lcom/esri/arcgis/interop/AuthInfo;)V (169 bytes) @ 0x027e5dac [0x027e5860+0x54c]
+J 1860 C1 com.esri.arcgis.interop.Dispatch.vtblInvoke(Ljava/lang/String;I[Ljava/lang/Object;)V (304 bytes) @ 0x027e8d30 [0x027e8730+0x600]
+j  com.esri.arcgis.geodatabase.IFeatureClassProxy.search(Lcom/esri/arcgis/geodatabase/IQueryFilter;Z)Lcom/esri/arcgis/geodatabase/IFeatureCursor;+41
+j  arcgis.ArcgisHelper.intersect(Lcom/esri/arcgis/geodatabase/IFeatureClass;Lcom/esri/arcgis/geometry/IPolygon;)Lcom/esri/arcgis/geodatabase/IFeatureCursor;+55
+j  helper.DetailHelper.detail(Lcom/esri/arcgis/geometry/IPolygon;D)Ljava/lang/String;+490
+j  arcgis.ArcgisShpHelper.addEQPolygon(Lbeans/EQInfo;ILjava/lang/String;Ljava/util/Hashtable;)Z+448
+j  event.EQEvent.createReport()Z+198
+j  event.EQEvent.endOp()Z+299
+j  mainFrame.EndDealThread.run()V+213
+v  ~StubRoutines::call_stub
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x458eec00 JavaThread "qtp22815297-188" [_thread_blocked, id=20704, stack(0x4f760000,0x4f7b0000)]
+  0x458f0400 JavaThread "qtp22815297-186" [_thread_blocked, id=24176, stack(0x51ba0000,0x51bf0000)]
+  0x4ddff400 JavaThread "qtp22815297-185" [_thread_in_native, id=27764, stack(0x4c770000,0x4c7c0000)]
+  0x4dede000 JavaThread "qtp22815297-184" [_thread_blocked, id=11724, stack(0x4cbc0000,0x4cc10000)]
+  0x458ee400 JavaThread "qtp22815297-183" [_thread_blocked, id=31000, stack(0x4cd70000,0x4cdc0000)]
+  0x4deaec00 JavaThread "qtp22815297-182" [_thread_blocked, id=37632, stack(0x51b30000,0x51b80000)]
+  0x44f6f400 JavaThread "qtp22815297-180" [_thread_in_native, id=22892, stack(0x51990000,0x519e0000)]
+  0x4de00400 JavaThread "Thread-167" [_thread_blocked, id=34912, stack(0x518a0000,0x518f0000)]
+=>0x4de00000 JavaThread "Thread-166" [_thread_in_native, id=9908, stack(0x4ebd0000,0x4ec20000)]
+  0x4de95000 JavaThread "Thread-165" [_thread_blocked, id=28648, stack(0x4f830000,0x4f880000)]
+  0x4ddfec00 JavaThread "Thread-162" [_thread_blocked, id=37808, stack(0x51510000,0x51560000)]
+  0x4ddfe400 JavaThread "Thread-161" [_thread_blocked, id=4700, stack(0x515e0000,0x51630000)]
+  0x4ddfe000 JavaThread "Thread-160" [_thread_blocked, id=30708, stack(0x512b0000,0x51300000)]
+  0x4ddfd800 JavaThread "Thread-159" [_thread_blocked, id=28592, stack(0x51110000,0x51160000)]
+  0x4ddfd400 JavaThread "Thread-158" [_thread_blocked, id=10724, stack(0x51350000,0x513a0000)]
+  0x4ddbc800 JavaThread "Thread-156" [_thread_blocked, id=35348, stack(0x51170000,0x511c0000)]
+  0x4ddbc400 JavaThread "Thread-155" [_thread_blocked, id=16856, stack(0x50af0000,0x50b40000)]
+  0x4ddbbc00 JavaThread "Thread-154" [_thread_blocked, id=19124, stack(0x50fa0000,0x50ff0000)]
+  0x4ddee000 JavaThread "Thread-153" [_thread_blocked, id=33960, stack(0x50f30000,0x50f80000)]
+  0x4ddbb800 JavaThread "Thread-152" [_thread_blocked, id=28056, stack(0x50ec0000,0x50f10000)]
+  0x4ddbb000 JavaThread "Thread-151" [_thread_blocked, id=18280, stack(0x50be0000,0x50c30000)]
+  0x4ddba400 JavaThread "Thread-149" [_thread_blocked, id=31928, stack(0x50840000,0x50890000)]
+  0x4ddb9c00 JavaThread "Thread-148" [_thread_blocked, id=23456, stack(0x50e20000,0x50e70000)]
+  0x4ddb9800 JavaThread "Thread-147" [_thread_blocked, id=33656, stack(0x50d30000,0x50d80000)]
+  0x4ddb9000 JavaThread "Thread-146" [_thread_blocked, id=13472, stack(0x50a90000,0x50ae0000)]
+  0x4df1f400 JavaThread "Thread-145" [_thread_blocked, id=9564, stack(0x50940000,0x50990000)]
+  0x4df1ec00 JavaThread "Thread-144" [_thread_blocked, id=18044, stack(0x50b60000,0x50bb0000)]
+  0x4df1e800 JavaThread "Thread-143" [_thread_blocked, id=11948, stack(0x50a20000,0x50a70000)]
+  0x4df1e000 JavaThread "Thread-142" [_thread_blocked, id=3572, stack(0x50890000,0x508e0000)]
+  0x4df1dc00 JavaThread "Thread-141" [_thread_blocked, id=13120, stack(0x507e0000,0x50830000)]
+  0x4df1d400 JavaThread "Thread-140" [_thread_blocked, id=34188, stack(0x48dc0000,0x48e10000)]
+  0x4df1cc00 JavaThread "Thread-139" [_thread_blocked, id=32108, stack(0x50620000,0x50670000)]
+  0x4df1c800 JavaThread "Thread-138" [_thread_blocked, id=37440, stack(0x506e0000,0x50730000)]
+  0x4df1c000 JavaThread "Thread-137" [_thread_blocked, id=36504, stack(0x47cd0000,0x47d20000)]
+  0x4df1bc00 JavaThread "Thread-136" [_thread_blocked, id=33924, stack(0x50540000,0x50590000)]
+  0x4ddf0400 JavaThread "Thread-135" [_thread_blocked, id=33092, stack(0x50320000,0x50370000)]
+  0x4ddf0000 JavaThread "Thread-134" [_thread_blocked, id=30688, stack(0x4ffb0000,0x50000000)]
+  0x4ddef800 JavaThread "Thread-133" [_thread_blocked, id=18744, stack(0x50410000,0x50460000)]
+  0x4ddef400 JavaThread "Thread-132" [_thread_blocked, id=33732, stack(0x503c0000,0x50410000)]
+  0x4ddeec00 JavaThread "Thread-131" [_thread_blocked, id=11716, stack(0x501c0000,0x50210000)]
+  0x4ddee400 JavaThread "Thread-130" [_thread_blocked, id=36736, stack(0x50230000,0x50280000)]
+  0x4dded800 JavaThread "Thread-128" [_thread_blocked, id=36176, stack(0x4fde0000,0x4fe30000)]
+  0x4dded400 JavaThread "Thread-127" [_thread_blocked, id=38888, stack(0x4fbf0000,0x4fc40000)]
+  0x4ddecc00 JavaThread "Thread-126" [_thread_blocked, id=29712, stack(0x4fe40000,0x4fe90000)]
+  0x4de77800 JavaThread "Thread-125" [_thread_blocked, id=8564, stack(0x4ff60000,0x4ffb0000)]
+  0x4de77000 JavaThread "Thread-124" [_thread_blocked, id=31164, stack(0x4fe90000,0x4fee0000)]
+  0x4de76c00 JavaThread "Thread-123" [_thread_blocked, id=38132, stack(0x4fc60000,0x4fcb0000)]
+  0x4de76400 JavaThread "Thread-122" [_thread_blocked, id=17096, stack(0x4fcb0000,0x4fd00000)]
+  0x4de75c00 JavaThread "Thread-121" [_thread_blocked, id=2448, stack(0x4fad0000,0x4fb20000)]
+  0x4de75800 JavaThread "Thread-120" [_thread_blocked, id=7780, stack(0x4fa70000,0x4fac0000)]
+  0x4de75000 JavaThread "Thread-119" [_thread_blocked, id=30980, stack(0x4fba0000,0x4fbf0000)]
+  0x4de74c00 JavaThread "Thread-118" [_thread_blocked, id=37328, stack(0x4fb30000,0x4fb80000)]
+  0x4de74400 JavaThread "Thread-117" [_thread_blocked, id=35544, stack(0x4f990000,0x4f9e0000)]
+  0x4de74000 JavaThread "Thread-116" [_thread_blocked, id=31484, stack(0x4f6e0000,0x4f730000)]
+  0x458f1000 JavaThread "Timer-2" [_thread_blocked, id=23596, stack(0x4fa10000,0x4fa60000)]
+  0x4deaf800 JavaThread "qtp22815297-123" [_thread_blocked, id=11880, stack(0x4c310000,0x4c360000)]
+  0x458ef800 JavaThread "qtp22815297-120" [_thread_blocked, id=36128, stack(0x4f660000,0x4f6b0000)]
+  0x4deae800 JavaThread "Thread-107" [_thread_blocked, id=23668, stack(0x4f5f0000,0x4f640000)]
+  0x4deae000 JavaThread "Thread-106" [_thread_blocked, id=36656, stack(0x4f1f0000,0x4f240000)]
+  0x4deadc00 JavaThread "Thread-105" [_thread_blocked, id=25500, stack(0x4f060000,0x4f0b0000)]
+  0x4dead400 JavaThread "Thread-104" [_thread_blocked, id=18388, stack(0x4f3b0000,0x4f400000)]
+  0x4deacc00 JavaThread "Thread-103" [_thread_blocked, id=31052, stack(0x4f420000,0x4f470000)]
+  0x4deac800 JavaThread "Thread-102" [_thread_blocked, id=11124, stack(0x4f320000,0x4f370000)]
+  0x4deac000 JavaThread "Thread-101" [_thread_blocked, id=20596, stack(0x4f120000,0x4f170000)]
+  0x4de96400 JavaThread "Thread-100" [_thread_blocked, id=20696, stack(0x4f280000,0x4f2d0000)]
+  0x4de95c00 JavaThread "Thread-99" [_thread_blocked, id=20244, stack(0x4f1a0000,0x4f1f0000)]
+  0x4de95800 JavaThread "Thread-98" [_thread_blocked, id=1208, stack(0x4d670000,0x4d6c0000)]
+  0x4de94800 JavaThread "Thread-96" [_thread_blocked, id=22232, stack(0x48f30000,0x48f80000)]
+  0x4de94400 JavaThread "Thread-95" [_thread_blocked, id=37836, stack(0x4ef30000,0x4ef80000)]
+  0x4de93c00 JavaThread "Thread-94" [_thread_blocked, id=15856, stack(0x4eb20000,0x4eb70000)]
+  0x4de93800 JavaThread "Thread-93" [_thread_blocked, id=21416, stack(0x4e8c0000,0x4e910000)]
+  0x4de93000 JavaThread "Thread-92" [_thread_blocked, id=37524, stack(0x4e9e0000,0x4ea30000)]
+  0x4de92c00 JavaThread "Thread-91" [_thread_blocked, id=38012, stack(0x4e660000,0x4e6b0000)]
+  0x4dd68800 JavaThread "Thread-90" [_thread_blocked, id=28760, stack(0x4e930000,0x4e980000)]
+  0x4dd68400 JavaThread "Thread-89" [_thread_blocked, id=37200, stack(0x4cdc0000,0x4ce10000)]
+  0x4dd67c00 JavaThread "Thread-88" [_thread_blocked, id=33776, stack(0x4dba0000,0x4dbf0000)]
+  0x4dd67800 JavaThread "Thread-87" [_thread_blocked, id=15412, stack(0x4e600000,0x4e650000)]
+  0x4dd67000 JavaThread "Thread-86" [_thread_blocked, id=32596, stack(0x4e6b0000,0x4e700000)]
+  0x4dd66c00 JavaThread "Thread-85" [_thread_blocked, id=13444, stack(0x4e540000,0x4e590000)]
+  0x4dd66400 JavaThread "Thread-84" [_thread_blocked, id=32872, stack(0x4daf0000,0x4db40000)]
+  0x4dd65c00 JavaThread "Thread-83" [_thread_blocked, id=36592, stack(0x4e4a0000,0x4e4f0000)]
+  0x4dd65800 JavaThread "Thread-82" [_thread_blocked, id=18684, stack(0x4db50000,0x4dba0000)]
+  0x4dee0c00 JavaThread "Thread-80" [_thread_blocked, id=36800, stack(0x4d8f0000,0x4d940000)]
+  0x4dee0400 JavaThread "Thread-79" [_thread_blocked, id=30528, stack(0x4d570000,0x4d5c0000)]
+  0x4dee0000 JavaThread "Thread-78" [_thread_blocked, id=30192, stack(0x4d5d0000,0x4d620000)]
+  0x4dedf800 JavaThread "Thread-77" [_thread_blocked, id=35072, stack(0x4d770000,0x4d7c0000)]
+  0x4dedf400 JavaThread "Thread-76" [_thread_blocked, id=34772, stack(0x4d6c0000,0x4d710000)]
+  0x4dedec00 JavaThread "Thread-75" [_thread_blocked, id=35156, stack(0x4d620000,0x4d670000)]
+  0x4dede400 JavaThread "Thread-74" [_thread_blocked, id=34372, stack(0x4d420000,0x4d470000)]
+  0x4dedd800 JavaThread "Thread-72" [_thread_blocked, id=30208, stack(0x4c900000,0x4c950000)]
+  0x4dedd400 JavaThread "Thread-71" [_thread_blocked, id=11280, stack(0x4d110000,0x4d160000)]
+  0x44f71800 JavaThread "Thread-70" [_thread_blocked, id=13232, stack(0x4d2b0000,0x4d300000)]
+  0x44f6ec00 JavaThread "Thread-69" [_thread_blocked, id=21812, stack(0x4d1d0000,0x4d220000)]
+  0x44f71400 JavaThread "Thread-68" [_thread_blocked, id=24248, stack(0x4d030000,0x4d080000)]
+  0x44f70c00 JavaThread "Thread-67" [_thread_blocked, id=28260, stack(0x4d080000,0x4d0d0000)]
+  0x44f70800 JavaThread "Thread-66" [_thread_blocked, id=11600, stack(0x4d160000,0x4d1b0000)]
+  0x44f70000 JavaThread "Thread-65" [_thread_blocked, id=31100, stack(0x4c9f0000,0x4ca40000)]
+  0x44f6fc00 JavaThread "Thread-64" [_thread_blocked, id=20884, stack(0x4cfb0000,0x4d000000)]
+  0x44f6e800 JavaThread "Thread-61" [_thread_blocked, id=35888, stack(0x4cca0000,0x4ccf0000)]
+  0x44f6e000 JavaThread "Scheduler-9211343" [_thread_blocked, id=38148, stack(0x4c9a0000,0x4c9f0000)]
+  0x458efc00 JavaThread "Scheduler-16240601" [_thread_blocked, id=24280, stack(0x4c4b0000,0x4c500000)]
+  0x458f0c00 JavaThread "qtp22815297-64-acceptor-0@16b190d-ServerConnector@10163d6{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}" [_thread_in_native, id=28068, stack(0x4c500000,0x4c550000)]
+  0x458ed800 JavaThread "Timer-1" [_thread_blocked, id=8076, stack(0x4c5a0000,0x4c5f0000)]
+  0x45874c00 JavaThread "Thread-3" [_thread_blocked, id=37644, stack(0x4a200000,0x4a250000)]
+  0x45874400 JavaThread "Thread-2" [_thread_blocked, id=9824, stack(0x4bd70000,0x4bdc0000)]
+  0x4586bc00 JavaThread "Timer-0" [_thread_blocked, id=24184, stack(0x4be50000,0x4bea0000)]
+  0x456fc000 JavaThread "J-Integra COM initialization thread (please don't touch)" daemon [_thread_blocked, id=13188, stack(0x45990000,0x459e0000)]
+  0x456c6000 JavaThread "Abandoned connection cleanup thread" daemon [_thread_blocked, id=9784, stack(0x45ad0000,0x45b20000)]
+  0x44edc000 JavaThread "Service Thread" daemon [_thread_blocked, id=34928, stack(0x452a0000,0x452f0000)]
+  0x44ead000 JavaThread "C1 CompilerThread0" daemon [_thread_blocked, id=29804, stack(0x44c90000,0x44ce0000)]
+  0x44eac000 JavaThread "Attach Listener" daemon [_thread_blocked, id=31608, stack(0x45220000,0x45270000)]
+  0x44ea9000 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=34812, stack(0x450c0000,0x45110000)]
+  0x44e89800 JavaThread "Finalizer" daemon [_thread_blocked, id=13332, stack(0x44ce0000,0x44d30000)]
+  0x44e63c00 JavaThread "Reference Handler" daemon [_thread_blocked, id=37976, stack(0x02370000,0x023c0000)]
+  0x0029e000 JavaThread "main" [_thread_blocked, id=33956, stack(0x02430000,0x02480000)]
+
+Other Threads:
+  0x44e5c800 VMThread [stack: 0x44df0000,0x44e40000] [id=31600]
+  0x44f1f400 WatcherThread [stack: 0x45510000,0x45560000] [id=34544]
+
+VM state:at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread:  ([mutex/lock_event])
+[0x0029c620] Threads_lock - owner thread: 0x44e5c800
+[0x0029ca30] Heap_lock - owner thread: 0x4586bc00
+
+Heap:
+ def new generation   total 157760K, used 545K [0x04600000, 0x0f120000, 0x19b50000)
+  eden space 140288K,   0% used [0x04600000, 0x04688718, 0x0cf00000)
+  from space 17472K,   0% used [0x0e010000, 0x0e010000, 0x0f120000)
+  to   space 17472K,   0% used [0x0cf00000, 0x0cf00000, 0x0e010000)
+ tenured generation   total 349568K, used 51222K [0x19b50000, 0x2f0b0000, 0x44600000)
+   the space 349568K,  14% used [0x19b50000, 0x1cd55a88, 0x1cd55c00, 0x2f0b0000)
+ Metaspace       used 11579K, capacity 11793K, committed 11904K, reserved 12672K
+
+Card table byte_map: [0x44600000,0x44810000] byte_map_base: 0x445dd000
+
+Polling page: 0x001c0000
+
+CodeCache: size=32768Kb used=3636Kb max_used=3636Kb free=29132Kb
+ bounds [0x02480000, 0x02818000, 0x04480000]
+ total_blobs=1377 nmethods=1127 adapters=180
+ compilation: enabled
+
+Compilation events (10 events):
+Event: 1866.619 Thread 0x44ead000 1996             java.util.Calendar::getFirstDayOfWeek (5 bytes)
+Event: 1866.619 Thread 0x44ead000 nmethod 1996 0x025836c8 code [0x025837c0, 0x02583840]
+Event: 1866.619 Thread 0x44ead000 1997             sun.util.calendar.AbstractCalendar::getDayOfWeekDateOnOrBefore (31 bytes)
+Event: 1866.620 Thread 0x44ead000 nmethod 1997 0x0277ff48 code [0x02780040, 0x02780230]
+Event: 1896.021 Thread 0x44ead000 1998             java.nio.DirectByteBuffer::address (5 bytes)
+Event: 1896.022 Thread 0x44ead000 nmethod 1998 0x025bd208 code [0x025bd300, 0x025bd380]
+Event: 1903.908 Thread 0x44ead000 1999             java.lang.AbstractStringBuilder::newCapacity (39 bytes)
+Event: 1903.908 Thread 0x44ead000 nmethod 1999 0x02582bc8 code [0x02582cd0, 0x02582e0c]
+Event: 1907.994 Thread 0x44ead000 2000             java.nio.CharBuffer::arrayOffset (35 bytes)
+Event: 1907.994 Thread 0x44ead000 nmethod 2000 0x0277fbc8 code [0x0277fce0, 0x0277fe48]
+
+GC Heap History (10 events):
+Event: 1914.174 GC heap after
+Heap after GC invocations=105495 (full 105048):
+ def new generation   total 157760K, used 0K [0x04600000, 0x0f120000, 0x19b50000)
+  eden space 140288K,   0% used [0x04600000, 0x04600000, 0x0cf00000)
+  from space 17472K,   0% used [0x0e010000, 0x0e010000, 0x0f120000)
+  to   space 17472K,   0% used [0x0cf00000, 0x0cf00000, 0x0e010000)
+ tenured generation   total 349568K, used 51217K [0x19b50000, 0x2f0b0000, 0x44600000)
+   the space 349568K,  14% used [0x19b50000, 0x1cd54640, 0x1cd54800, 0x2f0b0000)
+ Metaspace       used 11579K, capacity 11793K, committed 11904K, reserved 12672K
+}
+Event: 1914.174 GC heap before
+{Heap before GC invocations=105495 (full 105048):
+ def new generation   total 157760K, used 639K [0x04600000, 0x0f120000, 0x19b50000)
+  eden space 140288K,   0% used [0x04600000, 0x0469fdd0, 0x0cf00000)
+  from space 17472K,   0% used [0x0e010000, 0x0e010000, 0x0f120000)
+  to   space 17472K,   0% used [0x0cf00000, 0x0cf00000, 0x0e010000)
+ tenured generation   total 349568K, used 51217K [0x19b50000, 0x2f0b0000, 0x44600000)
+   the space 349568K,  14% used [0x19b50000, 0x1cd54640, 0x1cd54800, 0x2f0b0000)
+ Metaspace       used 11579K, capacity 11793K, committed 11904K, reserved 12672K
+Event: 1914.225 GC heap after
+Heap after GC invocations=105496 (full 105049):
+ def new generation   total 157760K, used 0K [0x04600000, 0x0f120000, 0x19b50000)
+  eden space 140288K,   0% used [0x04600000, 0x04600000, 0x0cf00000)
+  from space 17472K,   0% used [0x0e010000, 0x0e010000, 0x0f120000)
+  to   space 17472K,   0% used [0x0cf00000, 0x0cf00000, 0x0e010000)
+ tenured generation   total 349568K, used 51217K [0x19b50000, 0x2f0b0000, 0x44600000)
+   the space 349568K,  14% used [0x19b50000, 0x1cd54750, 0x1cd54800, 0x2f0b0000)
+ Metaspace       used 11579K, capacity 11793K, committed 11904K, reserved 12672K
+}
+Event: 1914.226 GC heap before
+{Heap before GC invocations=105496 (full 105049):
+ def new generation   total 157760K, used 869K [0x04600000, 0x0f120000, 0x19b50000)
+  eden space 140288K,   0% used [0x04600000, 0x046d9620, 0x0cf00000)
+  from space 17472K,   0% used [0x0e010000, 0x0e010000, 0x0f120000)
+  to   space 17472K,   0% used [0x0cf00000, 0x0cf00000, 0x0e010000)
+ tenured generation   total 349568K, used 51217K [0x19b50000, 0x2f0b0000, 0x44600000)
+   the space 349568K,  14% used [0x19b50000, 0x1cd54750, 0x1cd54800, 0x2f0b0000)
+ Metaspace       used 11579K, capacity 11793K, committed 11904K, reserved 12672K
+Event: 1914.278 GC heap after
+Heap after GC invocations=105497 (full 105050):
+ def new generation   total 157760K, used 0K [0x04600000, 0x0f120000, 0x19b50000)
+  eden space 140288K,   0% used [0x04600000, 0x04600000, 0x0cf00000)
+  from space 17472K,   0% used [0x0e010000, 0x0e010000, 0x0f120000)
+  to   space 17472K,   0% used [0x0cf00000, 0x0cf00000, 0x0e010000)
+ tenured generation   total 349568K, used 51235K [0x19b50000, 0x2f0b0000, 0x44600000)
+   the space 349568K,  14% used [0x19b50000, 0x1cd58d00, 0x1cd58e00, 0x2f0b0000)
+ Metaspace       used 11579K, capacity 11793K, committed 11904K, reserved 12672K
+}
+Event: 1914.279 GC heap before
+{Heap before GC invocations=105497 (full 105050):
+ def new generation   total 157760K, used 2516K [0x04600000, 0x0f120000, 0x19b50000)
+  eden space 140288K,   1% used [0x04600000, 0x048753b8, 0x0cf00000)
+  from space 17472K,   0% used [0x0e010000, 0x0e010000, 0x0f120000)
+  to   space 17472K,   0% used [0x0cf00000, 0x0cf00000, 0x0e010000)
+ tenured generation   total 349568K, used 51235K [0x19b50000, 0x2f0b0000, 0x44600000)
+   the space 349568K,  14% used [0x19b50000, 0x1cd58d00, 0x1cd58e00, 0x2f0b0000)
+ Metaspace       used 11579K, capacity 11793K, committed 11904K, reserved 12672K
+Event: 1914.337 GC heap after
+Heap after GC invocations=105498 (full 105051):
+ def new generation   total 157760K, used 0K [0x04600000, 0x0f120000, 0x19b50000)
+  eden space 140288K,   0% used [0x04600000, 0x04600000, 0x0cf00000)
+  from space 17472K,   0% used [0x0e010000, 0x0e010000, 0x0f120000)
+  to   space 17472K,   0% used [0x0cf00000, 0x0cf00000, 0x0e010000)
+ tenured generation   total 349568K, used 51254K [0x19b50000, 0x2f0b0000, 0x44600000)
+   the space 349568K,  14% used [0x19b50000, 0x1cd5d930, 0x1cd5da00, 0x2f0b0000)
+ Metaspace       used 11579K, capacity 11793K, committed 11904K, reserved 12672K
+}
+Event: 1914.338 GC heap before
+{Heap before GC invocations=105498 (full 105051):
+ def new generation   total 157760K, used 1108K [0x04600000, 0x0f120000, 0x19b50000)
+  eden space 140288K,   0% used [0x04600000, 0x04715300, 0x0cf00000)
+  from space 17472K,   0% used [0x0e010000, 0x0e010000, 0x0f120000)
+  to   space 17472K,   0% used [0x0cf00000, 0x0cf00000, 0x0e010000)
+ tenured generation   total 349568K, used 51254K [0x19b50000, 0x2f0b0000, 0x44600000)
+   the space 349568K,  14% used [0x19b50000, 0x1cd5d930, 0x1cd5da00, 0x2f0b0000)
+ Metaspace       used 11579K, capacity 11793K, committed 11904K, reserved 12672K
+Event: 1914.391 GC heap after
+Heap after GC invocations=105499 (full 105052):
+ def new generation   total 157760K, used 0K [0x04600000, 0x0f120000, 0x19b50000)
+  eden space 140288K,   0% used [0x04600000, 0x04600000, 0x0cf00000)
+  from space 17472K,   0% used [0x0e010000, 0x0e010000, 0x0f120000)
+  to   space 17472K,   0% used [0x0cf00000, 0x0cf00000, 0x0e010000)
+ tenured generation   total 349568K, used 51221K [0x19b50000, 0x2f0b0000, 0x44600000)
+   the space 349568K,  14% used [0x19b50000, 0x1cd55420, 0x1cd55600, 0x2f0b0000)
+ Metaspace       used 11579K, capacity 11793K, committed 11904K, reserved 12672K
+}
+Event: 1914.391 GC heap before
+{Heap before GC invocations=105499 (full 105052):
+ def new generation   total 157760K, used 823K [0x04600000, 0x0f120000, 0x19b50000)
+  eden space 140288K,   0% used [0x04600000, 0x046cdf90, 0x0cf00000)
+  from space 17472K,   0% used [0x0e010000, 0x0e010000, 0x0f120000)
+  to   space 17472K,   0% used [0x0cf00000, 0x0cf00000, 0x0e010000)
+ tenured generation   total 349568K, used 51221K [0x19b50000, 0x2f0b0000, 0x44600000)
+   the space 349568K,  14% used [0x19b50000, 0x1cd55420, 0x1cd55600, 0x2f0b0000)
+ Metaspace       used 11579K, capacity 11793K, committed 11904K, reserved 12672K
+
+Deoptimization events (0 events):
+No events
+
+Internal exceptions (10 events):
+Event: 1910.247 Thread 0x4de00000 Exception <a 'java/lang/NoClassDefFoundError': com/esri/arcgis/datasourcesfile/ShapefileWorkspace> (0x046cf4b0) thrown at [C:\workspace\8-2-build-windows-i586-cygwin\jdk8u121\8372\hotspot\src\share\vm\classfile\systemDictionary.cpp, line 199]
+Event: 1910.248 Thread 0x4de00000 Exception <a 'java/lang/NoClassDefFoundError': com/esri/arcgis/datasourcesfile/ShapefileWorkspace> (0x046d8238) thrown at [C:\workspace\8-2-build-windows-i586-cygwin\jdk8u121\8372\hotspot\src\share\vm\classfile\systemDictionary.cpp, line 199]
+Event: 1912.709 Thread 0x4de00400 Exception <a 'java/lang/NoClassDefFoundError': com/esri/arcgis/datasourcesfile/ShapefileWorkspace> (0x0490a9b8) thrown at [C:\workspace\8-2-build-windows-i586-cygwin\jdk8u121\8372\hotspot\src\share\vm\classfile\systemDictionary.cpp, line 199]
+Event: 1912.710 Thread 0x4de00400 Exception <a 'java/lang/NoClassDefFoundError': com/esri/arcgis/datasourcesfile/ShapefileWorkspace> (0x04933438) thrown at [C:\workspace\8-2-build-windows-i586-cygwin\jdk8u121\8372\hotspot\src\share\vm\classfile\systemDictionary.cpp, line 199]
+Event: 1912.712 Thread 0x4de00000 Exception <a 'java/lang/NoClassDefFoundError': com/esri/arcgis/datasourcesfile/ShapefileWorkspace> (0x04ae1598) thrown at [C:\workspace\8-2-build-windows-i586-cygwin\jdk8u121\8372\hotspot\src\share\vm\classfile\systemDictionary.cpp, line 199]
+Event: 1912.713 Thread 0x4de00000 Exception <a 'java/lang/NoClassDefFoundError': com/esri/arcgis/datasourcesfile/ShapefileWorkspace> (0x04b2fb68) thrown at [C:\workspace\8-2-build-windows-i586-cygwin\jdk8u121\8372\hotspot\src\share\vm\classfile\systemDictionary.cpp, line 199]
+Event: 1914.225 Thread 0x4de00000 Exception <a 'java/lang/NoClassDefFoundError': com/esri/arcgis/datasourcesfile/ShapefileWorkspace> (0x046d4230) thrown at [C:\workspace\8-2-build-windows-i586-cygwin\jdk8u121\8372\hotspot\src\share\vm\classfile\systemDictionary.cpp, line 199]
+Event: 1914.279 Thread 0x4de00400 Exception <a 'java/lang/NoClassDefFoundError': com/esri/arcgis/datasourcesfile/ShapefileWorkspace> (0x047e2db0) thrown at [C:\workspace\8-2-build-windows-i586-cygwin\jdk8u121\8372\hotspot\src\share\vm\classfile\systemDictionary.cpp, line 199]
+Event: 1914.337 Thread 0x4de00000 Exception <a 'java/lang/NoClassDefFoundError': com/esri/arcgis/datasourcesfile/ShapefileWorkspace> (0x046d2728) thrown at [C:\workspace\8-2-build-windows-i586-cygwin\jdk8u121\8372\hotspot\src\share\vm\classfile\systemDictionary.cpp, line 199]
+Event: 1914.337 Thread 0x4de00400 Exception <a 'java/lang/NoClassDefFoundError': com/esri/arcgis/datasourcesfile/ShapefileWorkspace> (0x046d8be8) thrown at [C:\workspace\8-2-build-windows-i586-cygwin\jdk8u121\8372\hotspot\src\share\vm\classfile\systemDictionary.cpp, line 199]
+
+Events (10 events):
+Event: 1914.279 loading class com/esri/arcgis/datasourcesfile/ShapefileWorkspace done
+Event: 1914.279 Executing VM operation: GenCollectFull
+Event: 1914.337 Executing VM operation: GenCollectFull done
+Event: 1914.337 loading class com/esri/arcgis/datasourcesfile/ShapefileWorkspace
+Event: 1914.337 loading class com/esri/arcgis/datasourcesfile/ShapefileWorkspace done
+Event: 1914.337 loading class com/esri/arcgis/datasourcesfile/ShapefileWorkspace
+Event: 1914.337 loading class com/esri/arcgis/datasourcesfile/ShapefileWorkspace done
+Event: 1914.338 Executing VM operation: GenCollectFull
+Event: 1914.391 Executing VM operation: GenCollectFull done
+Event: 1914.391 Executing VM operation: GenCollectFull
+
+
+Dynamic libraries:
+0x00e50000 - 0x00e83000 	D:\Program Files (x86)\Java\jre8-32\bin\javaw.exe
+0x77da0000 - 0x77f20000 	C:\Windows\SysWOW64\ntdll.dll
+0x760a0000 - 0x761b0000 	C:\Windows\syswow64\kernel32.dll
+0x757a0000 - 0x757e7000 	C:\Windows\syswow64\KERNELBASE.dll
+0x761f0000 - 0x76291000 	C:\Windows\syswow64\ADVAPI32.dll
+0x76ca0000 - 0x76d4c000 	C:\Windows\syswow64\msvcrt.dll
+0x76570000 - 0x76589000 	C:\Windows\SysWOW64\sechost.dll
+0x76460000 - 0x76550000 	C:\Windows\syswow64\RPCRT4.dll
+0x75700000 - 0x75760000 	C:\Windows\syswow64\SspiCli.dll
+0x756f0000 - 0x756fc000 	C:\Windows\syswow64\CRYPTBASE.dll
+0x76910000 - 0x76a10000 	C:\Windows\syswow64\USER32.dll
+0x76a10000 - 0x76aa0000 	C:\Windows\syswow64\GDI32.dll
+0x76550000 - 0x7655a000 	C:\Windows\syswow64\LPK.dll
+0x763a0000 - 0x7643d000 	C:\Windows\syswow64\USP10.dll
+0x6fae0000 - 0x6fc7e000 	C:\Windows\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_6.0.7601.18837_none_41e855142bd5705d\COMCTL32.dll
+0x759e0000 - 0x75a37000 	C:\Windows\syswow64\SHLWAPI.dll
+0x75b90000 - 0x75bf0000 	C:\Windows\system32\IMM32.DLL
+0x75a90000 - 0x75b5c000 	C:\Windows\syswow64\MSCTF.dll
+0x61670000 - 0x6172f000 	D:\Program Files (x86)\Java\jre8-32\bin\msvcr100.dll
+0x6c500000 - 0x6c8ce000 	D:\Program Files (x86)\Java\jre8-32\bin\client\jvm.dll
+0x6d830000 - 0x6d837000 	C:\Windows\system32\WSOCK32.dll
+0x76810000 - 0x76845000 	C:\Windows\syswow64\WS2_32.dll
+0x761b0000 - 0x761b6000 	C:\Windows\syswow64\NSI.dll
+0x72c20000 - 0x72c52000 	C:\Windows\system32\WINMM.dll
+0x73000000 - 0x73009000 	C:\Windows\system32\VERSION.dll
+0x76300000 - 0x76305000 	C:\Windows\syswow64\PSAPI.DLL
+0x72fb0000 - 0x72fbc000 	D:\Program Files (x86)\Java\jre8-32\bin\verify.dll
+0x72f30000 - 0x72f51000 	D:\Program Files (x86)\Java\jre8-32\bin\java.dll
+0x72da0000 - 0x72db3000 	D:\Program Files (x86)\Java\jre8-32\bin\zip.dll
+0x76d50000 - 0x7799b000 	C:\Windows\syswow64\SHELL32.dll
+0x757f0000 - 0x7594c000 	C:\Windows\syswow64\ole32.dll
+0x759d0000 - 0x759db000 	C:\Windows\syswow64\profapi.dll
+0x72630000 - 0x72647000 	C:\Windows\system32\CRYPTSP.dll
+0x725f0000 - 0x7262b000 	C:\Windows\system32\rsaenh.dll
+0x768f0000 - 0x76907000 	C:\Windows\syswow64\USERENV.dll
+0x6b0a0000 - 0x6b0b6000 	D:\Program Files (x86)\Java\jre8-32\bin\net.dll
+0x72720000 - 0x7275c000 	C:\Windows\system32\mswsock.dll
+0x723d0000 - 0x723d6000 	C:\Windows\System32\wship6.dll
+0x72ce0000 - 0x72cfc000 	C:\Windows\system32\IPHLPAPI.DLL
+0x72cd0000 - 0x72cd7000 	C:\Windows\system32\WINNSI.DLL
+0x6fdb0000 - 0x6fdbd000 	C:\Windows\system32\dhcpcsvc6.DLL
+0x726f0000 - 0x72702000 	C:\Windows\system32\dhcpcsvc.DLL
+0x72d00000 - 0x72d0f000 	D:\Program Files (x86)\Java\jre8-32\bin\nio.dll
+0x023e0000 - 0x0241d000 	C:\Users\arcgis\AppData\Local\Temp\jna--1409606593\jna4118262041398838931.dll
+0x45b80000 - 0x46bee000 	\\?\D:\WORKSP~1\GNSSWO~2\GNSS3.5\bin\FORTRA~1.DLL
+0x46cf0000 - 0x4708d000 	C:\Program Files (x86)\Sangfor\SSL\ClientComponent\SangforTcp.dll
+0x72ac0000 - 0x72bdc000 	C:\Windows\system32\MFC42.DLL
+0x75dd0000 - 0x75e5f000 	C:\Windows\syswow64\OLEAUT32.dll
+0x729a0000 - 0x72a2c000 	C:\Windows\system32\ODBC32.dll
+0x766c0000 - 0x7680b000 	C:\Windows\syswow64\urlmon.dll
+0x76450000 - 0x76454000 	C:\Windows\syswow64\api-ms-win-downlevel-ole32-l1-1-0.dll
+0x77d70000 - 0x77d74000 	C:\Windows\syswow64\api-ms-win-downlevel-shlwapi-l1-1-0.dll
+0x76560000 - 0x76565000 	C:\Windows\syswow64\api-ms-win-downlevel-advapi32-l1-1-0.dll
+0x75dc0000 - 0x75dc4000 	C:\Windows\syswow64\api-ms-win-downlevel-user32-l1-1-0.dll
+0x761c0000 - 0x761c4000 	C:\Windows\syswow64\api-ms-win-downlevel-version-l1-1-0.dll
+0x76850000 - 0x76853000 	C:\Windows\syswow64\api-ms-win-downlevel-normaliz-l1-1-0.dll
+0x76440000 - 0x76443000 	C:\Windows\syswow64\normaliz.DLL
+0x75e60000 - 0x76092000 	C:\Windows\syswow64\iertutil.dll
+0x76aa0000 - 0x76c93000 	C:\Windows\syswow64\WININET.dll
+0x72930000 - 0x72996000 	C:\Windows\system32\MSVCP60.dll
+0x76590000 - 0x766b1000 	C:\Windows\syswow64\CRYPT32.dll
+0x75760000 - 0x7576c000 	C:\Windows\syswow64\MSASN1.dll
+0x728f0000 - 0x72928000 	C:\Windows\system32\odbcint.dll
+0x72710000 - 0x72715000 	C:\Windows\System32\wshtcpip.dll
+0x47390000 - 0x474fd000 	C:\Program Files (x86)\Sangfor\SSL\ClientComponent\SangforNsp.dll
+0x76310000 - 0x76393000 	C:\Windows\syswow64\CLBCatQ.DLL
+0x70790000 - 0x707d4000 	C:\Windows\system32\DNSAPI.dll
+0x6fd20000 - 0x6fd26000 	C:\Windows\system32\rasadhlp.dll
+0x6fce0000 - 0x6fd18000 	C:\Windows\System32\fwpuclnt.dll
+0x7ce60000 - 0x7ced5000 	D:\Program Files (x86)\ArcGIS\Desktop10.2\bin\ntvinv.dll
+0x6fd40000 - 0x6fd50000 	C:\Windows\system32\NLAapi.dll
+0x6eca0000 - 0x6ecb0000 	C:\Windows\system32\napinsp.dll
+0x6ce20000 - 0x6ce32000 	C:\Windows\system32\pnrpnsp.dll
+0x6ce10000 - 0x6ce18000 	C:\Windows\System32\winrnr.dll
+0x724d0000 - 0x72550000 	C:\Windows\system32\uxtheme.dll
+0x47870000 - 0x47924000 	C:\Program Files (x86)\kbasesrv\knb3rdhmpg.dll
+0x72550000 - 0x7258c000 	C:\Windows\system32\OLEACC.dll
+0x69170000 - 0x69181000 	C:\Program Files (x86)\Common Files\ArcGIS\bin\ArcGISVersion.dll
+0x515a0000 - 0x515cb000 	C:\Windows\WinSxS\x86_microsoft.vc90.atl_1fc8b3b9a1e18e3b_9.0.30729.7523_none_51c8dd18bbe8adec\ATL90.DLL
+0x6cbb0000 - 0x6cc3e000 	C:\Windows\WinSxS\x86_microsoft.vc90.crt_1fc8b3b9a1e18e3b_9.0.30729.7523_none_508f21ccbcbbb7a8\MSVCP90.dll
+0x6d8a0000 - 0x6d943000 	C:\Windows\WinSxS\x86_microsoft.vc90.crt_1fc8b3b9a1e18e3b_9.0.30729.7523_none_508f21ccbcbbb7a8\MSVCR90.dll
+0x56310000 - 0x564e7000 	D:\PROGRAM FILES (X86)\ARCGIS\DESKTOP10.2\BIN\DADFLib.dll
+0x6a770000 - 0x6a787000 	D:\PROGRAM FILES (X86)\ARCGIS\DESKTOP10.2\BIN\AoInitializer.dll
+0x6e4e0000 - 0x6e4f0000 	D:\PROGRAM FILES (X86)\ARCGIS\DESKTOP10.2\BIN\AppInitializerLib.dll
+0x686d0000 - 0x68962000 	D:\PROGRAM FILES (X86)\ARCGIS\DESKTOP10.2\BIN\AfCore.dll
+0x72ca0000 - 0x72cb1000 	C:\Windows\system32\NETAPI32.dll
+0x72c90000 - 0x72c99000 	C:\Windows\system32\netutils.dll
+0x72c70000 - 0x72c89000 	C:\Windows\system32\srvcli.dll
+0x72c60000 - 0x72c6f000 	C:\Windows\system32\wkscli.dll
+0x6cfe0000 - 0x6cff2000 	C:\Windows\system32\MPR.dll
+0x75950000 - 0x759cb000 	C:\Windows\syswow64\COMDLG32.dll
+0x44d80000 - 0x44d86000 	d:\program files (x86)\arcgis\desktop10.2\bin\zh-CN\ResAfCore.dll
+0x68970000 - 0x68e11000 	D:\PROGRAM FILES (X86)\ARCGIS\DESKTOP10.2\BIN\AfCore_libFNP.dll
+0x731e0000 - 0x731e9000 	C:\Windows\system32\snmpapi.dll
+0x75bf0000 - 0x75d8d000 	C:\Windows\syswow64\SETUPAPI.dll
+0x75770000 - 0x75797000 	C:\Windows\syswow64\CFGMGR32.dll
+0x761d0000 - 0x761e2000 	C:\Windows\syswow64\DEVOBJ.dll
+0x72680000 - 0x726d1000 	C:\Windows\system32\WINSPOOL.DRV
+0x75d90000 - 0x75dbf000 	C:\Windows\syswow64\WINTRUST.dll
+0x72fc0000 - 0x72fc3000 	C:\Windows\system32\icmp.Dll
+0x6d850000 - 0x6d85a000 	C:\Windows\system32\wbem\wbemprox.dll
+0x6d790000 - 0x6d7ec000 	C:\Windows\system32\wbemcomn.dll
+0x6fd30000 - 0x6fd3e000 	C:\Windows\system32\RpcRtRemote.dll
+0x6d840000 - 0x6d84f000 	C:\Windows\system32\wbem\wbemsvc.dll
+0x6d6f0000 - 0x6d786000 	C:\Windows\system32\wbem\fastprox.dll
+0x6f080000 - 0x6f098000 	C:\Windows\system32\NTDSAPI.dll
+0x588d0000 - 0x589ba000 	D:\PROGRAM FILES (X86)\ARCGIS\DESKTOP10.2\BIN\BGLAPI.dll
+0x58bf0000 - 0x58cb6000 	D:\PROGRAM FILES (X86)\ARCGIS\DESKTOP10.2\BIN\BGLGeomChestLib.dll
+0x690d0000 - 0x69149000 	C:\Windows\system32\mscms.dll
+0x7a130000 - 0x7a180000 	D:\PROGRAM FILES (X86)\ARCGIS\DESKTOP10.2\BIN\LCMS117LIB.DLL
+0x587c0000 - 0x58892000 	D:\PROGRAM FILES (X86)\ARCGIS\DESKTOP10.2\BIN\BGLFontEngine.dll
+0x79540000 - 0x7965f000 	D:\PROGRAM FILES (X86)\ARCGIS\DESKTOP10.2\BIN\icuuc44.dll
+0x781d0000 - 0x79011000 	D:\PROGRAM FILES (X86)\ARCGIS\DESKTOP10.2\BIN\icudt44.dll
+0x79350000 - 0x79383000 	D:\PROGRAM FILES (X86)\ARCGIS\DESKTOP10.2\BIN\icule44.dll
+0x66e30000 - 0x66e5f000 	D:\PROGRAM FILES (X86)\ARCGIS\DESKTOP10.2\BIN\BGLAPILib.dll
+0x59bb0000 - 0x59c4f000 	D:\PROGRAM FILES (X86)\ARCGIS\DESKTOP10.2\BIN\ImageAccessLib.dll
+0x56d80000 - 0x56e13000 	D:\PROGRAM FILES (X86)\ARCGIS\DESKTOP10.2\BIN\BGLRasterizerLib.dll
+0x79300000 - 0x7930f000 	D:\PROGRAM FILES (X86)\ARCGIS\DESKTOP10.2\BIN\icuio44.dll
+0x79160000 - 0x792e5000 	D:\PROGRAM FILES (X86)\ARCGIS\DESKTOP10.2\BIN\icuin44.dll
+0x470f0000 - 0x470f6000 	d:\program files (x86)\arcgis\desktop10.2\bin\zh-CN\ResBGLAPI.dll
+0x6da40000 - 0x6db35000 	C:\Windows\system32\propsys.dll
+0x6f0a0000 - 0x6f0c1000 	C:\Windows\system32\ntmarta.dll
+0x75a40000 - 0x75a85000 	C:\Windows\syswow64\WLDAP32.dll
+0x615f0000 - 0x61666000 	D:\PROGRAM FILES (X86)\ARCGIS\DESKTOP10.2\BIN\BGLToGDIHelper.dll
+0x67ec0000 - 0x67ee8000 	D:\PROGRAM FILES (X86)\ARCGIS\DESKTOP10.2\BIN\BGLSymbolsLib.dll
+0x47540000 - 0x47546000 	d:\program files (x86)\arcgis\desktop10.2\bin\zh-CN\ResBGLToGDIHelper.dll
+0x56b90000 - 0x56c3c000 	D:\PROGRAM FILES (X86)\ARCGIS\DESKTOP10.2\BIN\BGLImageCoders.dll
+0x49130000 - 0x49137000 	d:\program files (x86)\arcgis\desktop10.2\bin\zh-CN\ResBGLImageCoders.dll
+
+VM Arguments:
+jvm_args: -Xms512m -Xmx1024m -Dfile.encoding=UTF-8 
+java_command: mainFrame.FrameRunner
+java_class_path (initial): D:\workspace\GNSSWorkspace2\GNSS3.5\bin;D:\workspace\GNSSWorkspace2\GNSS3.5\lib\Jama-1.0.3.jar;D:\workspace\GNSSWorkspace2\GNSS3.5\lib\jetty-client-9.4.5.v20170502.jar;D:\workspace\GNSSWorkspace2\GNSS3.5\lib\jetty-http-9.4.5.v20170502.jar;D:\workspace\GNSSWorkspace2\GNSS3.5\lib\jetty-io-9.4.5.v20170502.jar;D:\workspace\GNSSWorkspace2\GNSS3.5\lib\jetty-security-9.4.5.v20170502.jar;D:\workspace\GNSSWorkspace2\GNSS3.5\lib\jetty-server-9.4.5.v20170502.jar;D:\workspace\GNSSWorkspace2\GNSS3.5\lib\jetty-servlet-9.4.5.v20170502.jar;D:\workspace\GNSSWorkspace2\GNSS3.5\lib\jetty-util-9.4.5.v20170502.jar;D:\workspace\GNSSWorkspace2\GNSS3.5\lib\jna-4.0.0.jar;D:\workspace\GNSSWorkspace2\GNSS3.5\lib\jna-platform-4.0.0.jar;D:\workspace\GNSSWorkspace2\GNSS3.5\lib\mysql-connector-java-5.1.22-bin.jar;D:\workspace\GNSSWorkspace2\GNSS3.5\lib\servlet-api-3.1.jar;D:\workspace\GNSSWorkspace2\GNSS3.5\lib\commons-codec-1.10.jar;D:\workspace\GNSSWorkspace2\GNSS3.5\lib\commons-logging-1.2.jar;D:\workspace\GNSSWorkspace2\GNSS3.5\lib\fluent-hc-4.5.6.jar;D:\workspace\GNSSWorkspace2\GNSS3.5\lib\httpclient-4.5.6.jar;D:\workspace\GNSSWorkspace2\GNSS3.5\lib\httpclient-cache-4.5.6.jar;D:\workspace\GNSSWorkspace2\GNSS3.5\lib\httpclient-win-4.5.6.jar;D:\workspace\GNSSWorkspace2\GNSS3.5\lib\httpcore-4.4.10.jar;D:\workspace\GNSSWorkspace2\GNSS3.5\lib\httpmime-4.5.6.jar;D:\Program Files (x86)\ArcGIS\Desktop10.2\java\lib\arcobjects.jar;D:\workspace\GNSSWorkspace2\GNSS3.5\lib\dom4j-2.1.1.jar
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+JAVA_HOME=D:\Program Files (x86)\Java\jdk1.8.0_121
+CLASSPATH=.;D:\Program Files (x86)\Java\jdk1.8.0_121\lib\dt.jar;D:\Program Files (x86)\Java\jdk1.8.0_121\lib\tools.jar
+USERNAME=arcgis
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 158 Stepping 9, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 7 , 64 bit Build 7601 (6.1.7601.19045)
+
+CPU:total 4 (4 cores per cpu, 1 threads per core) family 6 model 158 stepping 9, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, clmul, erms, rtm, 3dnowpref, lzcnt, tsc, tscinvbit, bmi1, bmi2, adx
+
+Memory: 4k page, physical 8274904k(890884k free), swap 33096756k(12075252k free)
+
+vm_info: Java HotSpot(TM) Client VM (25.121-b13) for windows-x86 JRE (1.8.0_121-b13), built on Dec 12 2016 18:17:00 by "java_re" with MS VC++ 10.0 (VS2010)
+
+time: Fri Jun 14 11:41:47 2019
+elapsed time: 1914 seconds (0d 0h 31m 54s)
+
