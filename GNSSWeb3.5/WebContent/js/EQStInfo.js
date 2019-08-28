@@ -46,8 +46,9 @@ function initEQInfo(){
 			eqTime=new Date(msg.originTime);
 			if($("#stPTT").text()=="*"&& $("#stPT").text()!="*"){
 				$("#stPTT").text(parseFloat(new Date($("#stPT").text()).getTime() - eqTime.getTime())/1000);
-				$("#stSTT").text(parseFloat(new Date($("#stPT").text()).getTime() - eqTime.getTime())/1000);
+				$("#stSTT").text(parseFloat(new Date($("#stST").text()).getTime() - eqTime.getTime())/1000);
 			}
+			
 			initEQPointSt(msg.lon,msg.lat);
 			if(PT!=undefined){
 				initChartsData(stationID, PT);
@@ -74,8 +75,9 @@ function initEQPointSt(lon,lat){
 function initStationInMap(){
 	stPoint = parent.stationsGeometryMap.get(stationID);
 	mapInStChart.centerAt(stPoint);
-	$("#stLoc").text(stPoint.x.toFixed(2)+", " + stPoint.y.toFixed(2));//待修改成为BL
-	require(["esri/symbols/PictureMarkerSymbol"], function(PictureMarkerSymbol){
+	require(["esri/symbols/PictureMarkerSymbol", "esri/geometry/webMercatorUtils"], function(PictureMarkerSymbol, webMercatorUtils){
+		var lonLat = webMercatorUtils.xyToLngLat(stPoint.x, stPoint.y, true);
+		$("#stLoc").text(lonLat[0].toFixed(2)+"E, " + lonLat[1].toFixed(2)+"N");//修改成为BL
 		var symbol = new PictureMarkerSymbol("img/trip-32-orange.png", 16, 16);
 		var infoGraphic = new esri.Graphic(stPoint, symbol);
 		mapInStChart.graphics.add(infoGraphic);

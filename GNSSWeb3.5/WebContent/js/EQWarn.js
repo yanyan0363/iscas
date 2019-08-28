@@ -373,7 +373,7 @@ function initWarnReports(){
 				warns.appendChild(pt);
 				var pr = document.createElement("p");
 				pr.className = "WR";
-				pr.innerHTML="生成时间："+msg[i].T+"&nbsp;&nbsp;&nbsp;&nbsp;震级："+msg[i].M;
+				pr.innerHTML="生成时间："+msg[i].T+"&nbsp;&nbsp;&nbsp;&nbsp;GPS震级："+msg[i].stGPSMag;
 				warns.appendChild(pr);
 			}
 		},
@@ -382,145 +382,9 @@ function initWarnReports(){
 		}
 	});
 }
-//function initStations(){
-//	//实例化查询参数
-//	var query = new esri.tasks.Query();
-//	query.outFields = ["StationID"];
-//	query.outSpatialReference = warnMap.spatialReference;
-//	query.spatialRelationship = esri.tasks.Query.SPATIAL_REL_INTERSECTS;
-//	query.returnGeometry = true;
-//	query.where = "1=1";
-//	//实例化查询对象
-////	var queryTask = new esri.tasks.QueryTask("http://"+parent.serverIP+":6080/arcgis/rest/services/GNSSBase3_0/MapServer/" + stationLayer);
-//	var queryTask = new esri.tasks.QueryTask(parent.baseUrl + "/" +parent.stationLayer);
-//	//进行查询
-//	queryTask.execute(query, showStationsResult);
-//}
-//var greySymbol;
 var redSymbol;
 require(["esri/symbols/PictureMarkerSymbol"], function(PictureMarkerSymbol)  
 		{
-//			greySymbol = new PictureMarkerSymbol("img/trip-32-grey.png", 17, 17);
 			redSymbol = new PictureMarkerSymbol("img/trip-32-orange.png", 17, 17);
-//			greySymbol.setOffset(5,-6);
 			redSymbol.setOffset(5,-6);
 		}); 
-//function showStationsResult(result){
-//	if(result.features == 0){
-//		return;
-//	}
-//	for(var i = 0; i < result.features.length; i++){
-//		//获得该图形的形状
-//        var feature = result.features[i];
-//        var attr = feature.attributes;
-//        // attr.StationID);
-//		//获得该图形的形状
-//        var geometry = feature.geometry;
-//        //创建客户端图形
-//        var infoGraphic = new esri.Graphic(geometry, greySymbol);
-//        infoGraphic.setAttributes({"ID":attr.StationID});
-//        //将客户端图形添加到map中
-//        warnMap.graphics.add(infoGraphic);
-//	}
-//	warnMap.graphics.redraw();
-//}
-
-//function warnMapCenterAtEpi(){
-////alert(curMap.graphics.loaded);
-//if(warnMap != undefined && warnMap.loaded && warnMap.graphics != undefined && warnMap.graphics.loaded && epiGraphic != undefined){
-//warnMap.centerAt(eqPoint);
-//warnMap.graphics.add(epiGraphic);
-//warnMap.graphics.redraw();
-//}else{
-//alert("!loaded or warnMap.graphics == undefined or !warnMap.graphics.loaded or epiGraphic == undefined");
-//setTimeout(function(){warnMapCenterAtEpi();}, 1000);
-//return;
-//}
-//}
-//function initWarnEQLayer(){
-//warnEQLayer = new esri.layers.ArcGISDynamicMapServiceLayer(eqLyrUrl);
-//warnEQLayer.setOpacity(0.5);
-//warnEQLayer.setVisibleLayers([]);
-//warnMap.addLayer(warnEQLayer, 1);
-//initWarnVisibleEQLayers(1);
-//}
-//function initWarnVisibleEQLayers(reportNum){
-//if(visibleEQLyrs == undefined){
-//var url = eqLyrUrl+"/?f=pjson";
-//$.get(url,function(result){
-//	var json = eval('('+result+')');
-//	if(json.hasOwnProperty("error")&&json.error.code==500){
-//		return;
-//	}
-//	var length = json.layers.length;
-//	var layers = json.layers;
-//	for(var i=0; i<length; i++){
-//		lyrsMap[layers[i].name] = layers[i].id;
-//		if(layers[i].name=="EQPoints"){
-//			EQPointIdx = layers[i].id;
-//			visibleEQLyrs.push(layers[i].id);
-//			continue;
-//		}
-//		if(layers[i].name=="EQPolygons"){
-//			EQPolyIdx = layers[i].id;
-////			visibleEQLyrs.push(layers[i].id);
-//			continue;
-//		}
-//	}
-//	if(visibleEQLyrs == undefined){
-//		alert("暂未有地震图层信息，请稍后刷新");
-//	}else{
-//		warnEQLyrDef[lyrsMap["EQPoints"]] = "type='epicenter'";//"num = "+reportNum+" and type='epicenter'";
-//		warnEQLyrDef[lyrsMap["EQPolygons"]] = "num = "+reportNum;
-//		warnEQLayer.setLayerDefinitions(warnEQLyrDef);
-//		warnEQLayer.refresh();
-//	}
-//	//初始化mapCenter
-//	initWarnCenter();
-//});
-//}else{
-//EQLyrDefinitions[lyrsMap["EQPoints"]] = "type='epicenter'";
-//warnEQLayer.setLayerDefinitions(EQLyrDefinitions);
-//warnEQLayer.refresh();
-////初始化mapCenter
-//initWarnCenter();
-//}
-//}
-//function initWarnCenter(){
-////实例化查询参数
-//var query = new esri.tasks.Query();
-//query.outFields = ["num"];
-//query.outSpatialReference = warnMap.spatialReference;
-//query.spatialRelationship = esri.tasks.Query.SPATIAL_REL_INTERSECTS;
-//query.returnGeometry = true;
-//query.where = EQLyrDefinitions[lyrsMap["EQPoints"]];
-////实例化查询对象
-//var queryTask = new esri.tasks.QueryTask(eqLyrUrl + "/" + lyrsMap["EQPoints"]+"/");
-////进行查询
-//queryTask.execute(query, initWarnCenterPoint);
-//}
-//function initWarnCenterPoint(){
-//if(eqPoint == undefined || warnMap.loaded == false){
-//return;
-//}
-////地图上添加EQPoint
-//var symbol = new esri.symbol.PictureMarkerSymbol("img/ep.png", 32, 32);
-//var attr = {"ID":eqID,"type":"EQPoint"};
-//warnMapCenter = result.features[0].geometry;
-//var graphic = new esri.Graphic(warnMapCenter, symbol, attr);
-//warnMap.graphics.add(graphic);
-//warnMap.centerAt(warnMapCenter);
-//}
-
-//var stationsInfo="{\"stationsInfo\":["
-//+"{\"ST\":\"2017-06-06 17:00:02.110\",\"PT\":\"2017-06-06 17:00:02.010\",\"stationID\":\"51PXZ\"},"
-//+"{\"ST\":\"2017-06-06 17:00:02.210\",\"PT\":\"2017-06-06 17:00:02.110\",\"stationID\":\"51DXY\"},"
-//+"{\"ST\":\"2017-06-06 17:00:02.310\",\"PT\":\"2017-06-06 17:00:02.210\",\"stationID\":\"51PJD\"},"
-//+"{\"ST\":\"2017-06-06 17:00:02.410\",\"PT\":\"2017-06-06 17:00:02.310\",\"stationID\":\"51BXY\"},"
-//+"{\"ST\":\"2017-06-06 17:00:02.510\",\"PT\":\"2017-06-06 17:00:02.410\",\"stationID\":\"51LSJ\"},"
-//+"{\"ST\":\"2017-06-06 17:00:02.610\",\"PT\":\"2017-06-06 17:00:02.510\",\"stationID\":\"51LSF\"},"
-//+"{\"ST\":\"2017-06-06 17:00:02.710\",\"PT\":\"2017-06-06 17:00:02.610\",\"stationID\":\"51YAL\"},"
-//+"{\"ST\":\"2017-06-06 17:00:02.810\",\"PT\":\"2017-06-06 17:00:02.710\",\"stationID\":\"51YBY\"},"
-//+"{\"ST\":\"2017-06-06 17:00:10.910\",\"PT\":\"2017-06-06 17:00:02.810\",\"stationID\":\"51JLD\"}],"
-//+"\"ID\":\"this is a test ID.\",\"info\":\"this is a test info\"}";
-//var json = JSON.parse(stationsInfo);
