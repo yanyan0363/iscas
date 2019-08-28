@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head> 
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">  
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>  
+    <title>地震灾情</title>  
+    <link rel="stylesheet" href="js/arcgis/3.20/esri/css/esri.css">
+<script src="js/jquery-3.2.0.min.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="css/bootstrap.css">
+<!-- Optional theme -->
+<link rel="stylesheet" href="css/bootstrap-theme.css" >
+<!-- Latest compiled and minified JavaScript -->
+<script src="js/bootstrap.js"></script>
+<!-- bootstrap-table -->
+<link rel="stylesheet" href="css/bootstrap-table.css">
+<script src="js/bootstrap-table.js"></script>
+<script src="js/bootstrap-table-zh-CN.min.js"></script>
+<link rel="stylesheet" href="css/EQInfo.css">
+</head>  
+  
+<body> 
+<div class="outDiv">
+	<div id="topTab">
+		<ul id="leftTab" class="nav nav-tabs" style="display:inline-block;width:100%;">
+			<li class="active"><a href="#EQIndex" data-toggle="tab">地震首页</a></li>
+			<li ><a href="#WarnTab" data-toggle="tab">地震预警</a></li>
+			<li ><a href="#reportTab" data-toggle="tab">地震速报</a></li>
+			<li onclick="imgsClick();"><a href="#imgs" data-toggle="tab">地震专题图</a></li>
+		</ul>
+	</div>
+	<div id="topTabContent" class="tab-content">
+		<div class="tab-pane fade mainW in active" id="EQIndex">
+			<div class="left" id="left1">
+				<div class="leftleft lines">
+					<div class="btRed" style="margin-top:5px;">地震速报</div>
+					<div style="height:750px;" class="glines">
+						<div style="float:left;width:7px;height:755px;padding-top:10px;padding-bottom:10px;">
+							<div style="height:100%;background-color:rgb(167, 167, 167);width:2px;margin-left:5px;"></div>
+						</div>
+						<div class="rps" id="rps">
+						</div>
+					</div>
+				</div>
+				<div class="leftright">
+					<div class="leftTop" id="mapDiv">
+						<div id="stMsDiv">
+							<div id="stMsNum" class="btBlue" style="margin-top:5px;"></div>
+							<div id="stMsTblDiv">
+								<table id="stMsTbl" class="table"></table>
+							</div>
+						</div>
+						<div id="map"></div>
+					</div>
+					<div class="leftBottom" id="magChartDivDiv">
+						<div id="magChartDiv" style="overflow-y:auto;height:100%;"></div>
+					</div>
+				</div>
+			</div>
+			<div class="right">
+				<div class="rightTop" id="info">
+					<div class="tBold btBlue">地震基本信息</div>
+					<div class="glines" style="padding-left:10px;padding-top:5px;">
+						<p><span class='txtBold'>地震发生时刻： </span><span id="oTimeInIdx"></span></p>
+						<p><span class='txtBold'>震中位置： </span><span id="epiInIdx"></span></p>
+						<p><span class='txtBold'>GPS震级：</span> <span id="gpsMagInIdx"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<span class='txtBold'>MEMS震级：</span> <span id="memsMagInIdx"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<span class='txtBold'>首台：</span> <span id="fStInIdx"></span></p>
+					</div>
+				</div>
+				<div class="rightBottom" id="Reports">
+					<table id="EQStTbl" class="table table-striped table-bordered table-hover"></table>
+				</div>
+			</div>
+		</div>
+		<div class="tab-pane fade mainW" id="WarnTab">
+			<div class="left">
+				<div id="warnMap"></div>
+			</div>
+			<div class="right" style="background-color:white;padding-left:10px;padding-right:10px;padding-top:10px;">
+				<div>
+					<div class="tBold btBlue">地震基本信息</div>
+					<div class="glines" style="padding-left:10px;padding-top:5px;">
+						<p><span class='txtBold'>地震发生时刻：</span><span id="oTInWarn"></span></p>
+						<p><span class='txtBold'>震中位置：</span> <span id="epiInWarn"></span></p>
+						<p><span class='txtBold'>震级：</span><span id="magInWarn"></span></p>
+					</div>
+				</div>
+				<div class="glines consoleDiv" style="margin-top:10px;">
+					<div id="console" class="btBlue">控制台</div>
+					<div id="startBt" onclick="startPlay();"></div>
+					<div id="endBt" onclick="endPlay();"></div>
+				</div>
+				<div class="glines" style="margin-top:10px;">
+					<div class="btBlue">已发震时刻</div>
+					<div style="text-align:center;margin-top:10px;margin-bottom:10px;">
+						<span id="tt1">0</span>秒： <span id="tt2">*</span>
+					</div>
+				</div>
+				<div class="glines" id="ps">
+					<div id="p">
+						<p class="tBold">P波影响半径</p>
+						<p><span id="PEpiDis">*</span><span>km</span></p>
+					</div>
+					<div id="s">
+						<p class="tBold">S波影响半径</p>
+						<p><span id="SEpiDis">*</span><span>km</span></p>
+					</div>
+				</div>
+				<div id="stationsDiv">
+					<div class="btBlue">台站信息</div>
+					<div class="glines" style="height:220px;padding-left:10px;padding-right:10px;">
+						<table id="warnStations" class="table table-striped table-bordered table-hover"></table>
+					</div>
+				</div>
+				<div class="glines" id="warns">
+				<!-- 
+					<p class="WRTBold">预警第一报</p>
+					<p class="WR">发震时间：<span>2017-01-11 11:33:44.333</span>&nbsp;&nbsp;&nbsp;&nbsp;震级：<span>5.6</span></p>
+					 -->
+				</div>
+			</div>
+		</div>
+		<div class="tab-pane fade mainW" id="reportTab">
+			<div class="left" >
+				<div class="leftTop">
+					<div id="reportMap" style="height:550px;width:1385px;"></div>
+				</div>
+				<div id="greyDiv"></div>
+				<div id="reportChartDiv"></div>
+			</div>
+			<div class="right" id="info">
+				<div style="background-color:white;padding-left:5px;padding-right:5px;padding-top:10px;">
+					<ul id="rightTab" class="nav nav-tabs">
+						<li class="active"><a href="#eqInfo" data-toggle="tab">地震灾情</a></li>
+						<li><a href="#target" data-toggle="tab">重点目标</a></li>
+						<li><a href="#rail" data-toggle="tab">生命线</a></li>
+					</ul>
+					<div id="rightTabContent" class="tab-content">
+						<div class="tab-pane fade in active" id="eqInfo">
+							<div class="lines" style="padding-left:10px;padding-top:5px;">
+					    		<p><span class='txtBold'>地震ID：</span><span id="eqID"></span></p>
+						    	<p><span class='txtBold'>覆盖面积：</span><span id = "area"></span></p>
+						    	<p><span class='txtBold'>灾区人口：</span>*** 万人</p>
+						    	<p><span class='txtBold'>震中位置：</span><span id = "epi"></p>
+					    	</div>
+					    	<div id="proList"></div>
+						</div>
+						<div class="tab-pane fade" id="target">
+							<span class='txtBold'>学校：</span>
+					    	<br>
+					    	<span class='txtBold'>水库：</span>
+						</div>
+						<div class="tab-pane fade" id="rail"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="imgs" class="tab-pane fade">
+			<div style="padding-top:10px;padding-left:20px;padding-right:20px;">
+				<div class="btBlue" style="margin-top:10px;">基本信息</div>
+				<div class="imgsBasicInfo">
+					<p><b>ID:</b><span id="basicID"></span></p>
+					<p><b>名称：</b><span id="basicName"></span></p>
+					<p><b>触发时刻：</b><span id="basicTriggerTime"></span></p>
+					<p><b>发震时刻：</b><span id="basicTime"></span></p>
+					<p><b>震中位置：</b><span id="basicLoc"></span></p>
+					<br>
+				</div>
+				<div class="btBlue" style="margin-top:20px;">震动位移</div>
+				<div class="glines">
+					<div id="imgsDiv"></div>
+				</div>
+				<div class="btBlue" style="margin-top:20px;">等值线图</div>
+				<div class="glines">
+					<div id="contoursImgsDiv"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="js/echarts.js"></script>
+<script src="js/arcgis/3.20/init.js"></script>
+<script src="js/EQInfo.js"></script>
+<script src="js/EQIndex.js"></script>
+<script src="js/EQWarn.js"></script>
+<script src="js/EQReport.js"></script>
+<script src="js/Imgs.js"></script>
+</body>  
+</html>

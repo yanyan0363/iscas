@@ -1,0 +1,244 @@
+<!DOCTYPE html>  
+<html>  
+<head>  
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">  
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>  
+    <title>振幅走向</title>  
+    <link rel="stylesheet" href="js/arcgis/3.20/esri/css/esri.css">
+<script src="js/jquery-3.2.0.min.js"></script>
+    <style>
+    	html, body{
+         	height:100%;
+         	width:100%;
+         	margin:0px;
+         }
+         #map{
+         	height:95%;
+         	width:100%;
+         	padding-right:0px;
+         }
+         #rightDiv{
+         	height:100%;
+         	width:10%;
+         	float:right;
+         	display:inline;
+         }
+         #topDiv{
+         	width:100%;
+         	height:40px;
+         	background-color: #777777; /* #B0C4DE lightsteelblue */
+         	padding:0px;
+         	color:white;
+         }
+         button{			
+         	background-color: #008CBA; /* Green */
+         	border:none;
+         	color: white;
+         	padding: 5px 5px;
+         	text-align: center;
+         	text-decoration: none;
+         	display: inline-block;
+         	font-size: 16px;
+         	border-radius: 6px;
+         	width:80px;
+         	height:35px;
+         	cursor:pointer;
+         }
+         select{
+         	width:80px;
+         	height:30px;
+         	margin-top:5px;
+         	margin-bottom:5px;
+         }
+         .btn_2{
+         	width:70px;
+         }
+         .btn_5{
+         	width:110px;
+         }
+    </style>
+    <script type="text/javascript">
+	    var eqID = getQueryString("EQID");
+	    //截取URL参数
+	    function getQueryString(name) {
+	          var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+	          var r = window.location.search.substr(1).match(reg);
+	          if (r != null) 
+	        	  return unescape(r[2]); 
+	          return null;
+	       }  
+    </script>
+</head>  
+  
+<body> 
+	
+	<div id="topDiv">
+		<div style="padding-left:20px;">
+			<span id="eqID">地震ID：</span>
+			振幅方向：
+			<select id="direct">
+			  <option value ="_H_">水平方向</option>
+			  <option value ="_V_">垂直方向</option>
+			</select>
+			选择时刻：
+			<select id="tNode">
+			<!-- 
+			  <option value ="30s">30s</option>
+			  <option value ="60s">60s</option>
+			  <option value="90s">90s</option>
+			  <option value="300s">300s</option>
+			   -->
+			</select>
+			<button id="" onclick="showArrows();" class="btn_2">查询</button>
+			<a id="detailA" href="./detail.html?eqID=" target="_self">地震详情</a>
+			<a id="contoursA" href="./EQContours.html?eqID=" target="_self">等值线示意图</a>
+			<a id="imgA" href="./EQImgs.html?eqID=" target="_self">图件</a>
+			<!-- 
+			<button id="startBtnH" onclick="playH();" class="btn_5">水平向演变</button>
+			<button id="startBtnV" onclick="playV();" class="btn_5">垂直向演变</button>
+			 -->
+		</div>
+	</div>
+	<div id="map"></div>
+<script src="js/arcgis/3.20/init.js" type="text/javascript"></script>
+<script>
+$("#imgA").attr("href","./EQImgs.html?eqID="+eqID);
+$("#detailA").attr("href","./detail.html?eqID="+eqID);
+$("#contoursA").attr("href","./EQContours.html?eqID="+eqID);
+$("#eqID").text("地震ID：" + eqID);
+var map;
+var mapCenter;
+var eqLayer,baseLayer;  
+var eqLDefin = [];//EQLayer的过滤条件
+var baseDefinitions = [];//baseLayer的过滤条件
+var eqLayers = [4,5,6,7,8,9,10,11];
+var hLayers = [
+	[10],
+	[9],
+	[8],
+	[11]
+	];
+var vLayers = [
+	[6],
+	[5],
+	[4],
+	[7]
+	];
+var layerIdx;
+require(["esri/map","esri/Color","esri/symbols/SimpleLineSymbol"], function(Map,Color,SimpleLineSymbol)  
+{  
+    map = new Map("map", {logo:false,slider: true});  
+    baseLayer = new esri.layers.ArcGISDynamicMapServiceLayer("http://"+parent.serverIP+":6080/arcgis/rest/services/GNSSBaseXian80E102/MapServer");
+    baseLayer.setVisibleLayers([2,17,20]);//[0,2,5,10,11]
+    map.addLayer(baseLayer, 0);
+    eqLayer = new esri.layers.ArcGISDynamicMapServiceLayer("http://"+parent.serverIP+":6080/arcgis/rest/services/EQ/"+eqID+"/MapServer");
+    eqLayer.setVisibleLayers([]);
+    map.addLayer(eqLayer, 1);
+    map.setScale(2500000);
+    map.on("load", function(){
+    	addCenterPoint();
+    });
+    initTimeLineFromService();//initTimeLine成功后，调用showArrows()，默认显示当前Arrows
+    
+});
+function initTimeLineFromService(){
+	var url = "http://localhost:6080/arcgis/rest/services/EQ/"+eqID+"/MapServer/?f=pjson";
+    $.get(url,function(result){
+    	var json = eval('('+result+')');
+    	var length = json.layers.length;
+    	var layers = json.layers;
+    	var tNode = $("#tNode");
+    	var times = [];
+    	for(var i=0; i<length; i++){
+    		var name = layers[i].name;
+    		if(name.indexOf("EQArrows_")==0){
+    			var val = parseInt(name.substring(name.lastIndexOf('_')+1, name.length-1));
+    			if(times.indexOf(val) == -1){
+    				times.push(val);
+    			}
+    		}
+    	}
+    	times.sort(sortNumber);
+    	for(var i=0; i<times.length; i++){
+    		var opt = $("<option value =\""+times[i]+"s\">"+times[i]+"s</option>");
+			tNode.append(opt);
+    	}
+    	showArrows();
+    });
+}
+//数值型array的排序函数
+function sortNumber(a, b){
+	return a - b;
+}
+//从GNSS后台读取的时间节点
+function initTimeLine(){
+	$.ajax({
+		type:"get",
+		url:"http://"+parent.serverIP+":8090/GNSS/getTimeLine",
+		dataType:'jsonp',//异步
+		jsonp:'callback',
+		success:function(msg){
+			if(msg == undefined){
+				return;
+			}
+			var tNode = $("#tNode");
+			for(var i=0; i<msg.length; i++){
+				var opt = $("<option value =\""+msg[i]+"\">"+msg[i]+"</option>");
+				tNode.append(opt);
+			}
+			showArrows();
+		},
+		error:function(XMLHttpRequest, textStatus, errorThrown){
+			alert("获取时间节点出错了，请联系管理员");
+		}
+	});
+}
+function showArrows(){
+	var name = "EQArrows"+$("#direct").val()+$("#tNode").val();
+	fidLyrByLyrName(name);
+}
+function fidLyrByLyrName(lyrName){
+	var url = "http://localhost:6080/arcgis/rest/services/EQ/"+eqID+"/MapServer/?f=pjson";
+    $.get(url,function(result){
+    	var json = eval('('+result+')');
+    	var length = json.layers.length;
+    	var layers = json.layers;
+    	for(var i=0; i<length; i++){
+    		if(layers[i].name==lyrName){
+    			eqLayer.setVisibleLayers([layers[i].id]);
+    			break;
+    		}
+    	}
+    });
+}
+function sleep(numberMillis) { 
+	var now = new Date(); 
+	var exitTime = now.getTime() + numberMillis; 
+	while (true) { 
+	now = new Date(); 
+	if (now.getTime() > exitTime) 
+		return; 
+	} 
+}
+function addCenterPoint(){
+	mapCenter = new esri.geometry.Point(647399,3445475,map.spatialReference);
+    map.centerAt(mapCenter);
+}
+//存在some问题
+function playH(){
+	for(var j=0; j< hLayers.length; j++){
+		eqLayer.setVisibleLayers(hLayers[j]);
+		eqLayer.refresh();
+		sleep(500);
+	}
+}
+//存在some问题
+function playV(){
+	for(var j=0; j< vLayers.length; j++){
+		eqLayer.setVisibleLayers(vLayers[j]);
+		sleep(500);
+	}
+}
+</script>
+</body>  
+</html>

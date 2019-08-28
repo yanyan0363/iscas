@@ -1,0 +1,289 @@
+html, body{
+   height:100%;
+   width:100%;
+   overflow-y:auto;
+   overflow-x:auto;
+   background-color:rgb(222, 222, 222);
+   margin:0px 0px 0px 0px;
+   padding: 0px 0px 0px 0px;
+}
+a{
+ 	font-size:14px;
+ 	cursor:pointer;
+ }
+.container{
+	height:100%;
+	width:100%;
+	padding-left: 0px; 
+	padding-right: 0px;
+}
+.left{
+	width:1370px;
+	height:1100px;
+	float:left;
+	margin-left:20px;
+	margin-right:20px;
+	border-style:none solid none none;
+	border-width:10px;
+	border-color:rgb(221, 221, 221);
+	background-color:white;
+}
+.right{
+	float:left;
+	width:430px;
+	height:1100px;
+	padding-left:10px;
+	padding-right:10px;
+	margin-right:10px;
+	background-color:white;
+}
+.rightTop{
+	margin-top:5px;
+}
+.rightBottom{
+	padding-top:20px;
+}
+.mapInStChartDiv{
+	height:250px;
+	width:400px;
+	float:left;
+	margin-left:20px;
+	margin-right:10px;
+}
+.magChartInStChartDiv{
+	height:250px;
+	width:850px;
+	float:left;
+	overflow-y:auto;
+	margin-left:10px;
+	margin-right:20px;
+}
+.leftTop{
+	height:250px;
+	width:100%;
+	margin-top:10px;
+	padding-left:10px;
+	padding-right:10px;
+}
+.leftBottom{
+	width:100%;
+	height:800px;
+	padding-left:30px;
+	padding-right:10px;
+	padding-bottom:10px;
+	margin-top:10px;
+	background-color:rgb(256, 256, 256);
+}
+#magChartDiv{
+	height:150px;
+	width:900px;
+	background-color:rgb(256, 256, 256);
+	margin-left:10px;
+	margin-right:10px;
+}
+.btRed{
+    text-align:center;
+    height:28px;
+    font-size:14px;
+    background-color:red;
+    color:white;
+    line-height:28px;
+    vertical-align:middle;
+}
+.btR{
+	width:80px;
+	height:26px;
+	background-color:rgb(120, 120, 120);
+	text-align:center;
+	padding-top:5px;
+	color:white;
+}
+.rpDiv{
+    width:100%;
+    height:120px;
+    cursor:pointer;
+    margin-bottom:5px;
+}
+.rpLeftLine{
+    float:left;
+    background-color:rgb(176, 176, 176);
+    height:2px;
+    width:32px;
+    margin-top:7px;
+}
+.floatLeft{
+    float:left;
+}
+.mtop5{
+    margin-top:5px;
+}  
+.glines{
+    border-style:solid;
+    border-width:1px;
+    border-color:black;
+    background-color:white;
+}
+.rps{
+	margin-top:10px;
+	padding-left:0px;
+	float:left;
+	height:730px;
+	width:360px;
+	overflow-y:auto;
+	overflow-x:auto;
+	font-size:14px;
+}
+.rp{
+	width:100%;
+	float:right;
+}          
+.rpB{
+    width:290px;
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-left:5px;
+}
+.rpLine{
+    height:20px;
+    margin-left:3px;
+}
+.btBlue{
+	text-align:center;
+	height:28px;
+	font-size:14px;
+	background-color:#27408b;
+	color:white;
+	line-height:28px;
+	vertical-align:middle;
+}
+.rightReports{
+	background-color:white;
+}
+#topTab{
+	height:40px;
+	color:white;
+	background-color:black;
+	width:150px;
+	margin-left:20px;
+	padding-left:10px;
+	padding-right:10px;
+	line-height:40px;
+}
+
+
+#mapInStChart{
+	height:100%;
+	width:100%;
+	padding: 0px 0px 0px 0px;
+}
+
+#reports, #stations{
+	padding-right: 0px; 
+	padding-left: 0px;
+}
+
+#lBDiv{
+	padding-top:10px;
+	text-decoration:underline;
+	text-align:left;
+}
+#rightTabContent.tab-content{
+	padding-top:10px;
+	padding-left: 0px;
+	overflow-y:auto;
+}
+#reportsTabContent{
+}
+.provBold{
+	font:normal bold 20px/30px arial,sans-serif;
+	margin: 20px 0px 5px 0px;
+}
+#proList{
+	height:620px;
+}
+.detail{
+	font:normal bold 16px/30px arial,sans-serif;
+	margin: 5px 0px 5px 0px;
+}
+.topTab{
+	width:100%;
+	background-color: #777777; /* #B0C4DE lightsteelblue */
+	padding:0px;
+	color:white;
+}
+thead{
+	background-color: #B0C4DE;
+}
+.table > tbody > tr.active > td{
+	background-color:#dddddd;
+}
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus{
+	color:rgb(256, 256, 256);
+	background-color:rgb(0, 0, 0);
+}
+.mainW{
+	height:820px;
+}
+select{
+	width:80px;
+	height:30px;
+	margin-top:5px;
+	margin-bottom:5px;	
+}
+.ACTopDiv{
+	width:100%;
+	height:40px;
+	padding-left:20px;
+	background-color: #B0C4DE;
+}
+.ACMapDiv{
+	float:left;
+	width:50%;
+	height:100%;
+	border:1px solid black;
+}
+
+.outDiv{
+	width:1850px;
+	height:820px;
+}
+.txtBold{
+	font-weight:bold;
+}
+.tBold{
+	font:normal bold 15px/25px arial,sans-serif;
+	margin: 0px 0px 0px 0px;
+}
+.WRTBold{
+	font:normal bold 15px/20px arial,sans-serif;
+	margin: 10px 0px 0px 10px;
+}
+.WR{
+	font:normal 10px/15px arial,sans-serif;
+	margin: 10px 0px 0px 30px;
+}
+.lines{
+	border-style:solid solid solid solid;
+	border-width:1px;
+	border-color:rgb(221, 221, 221);
+}
+.BLine{
+	border-style:none none solid none;
+	border-width:1px;
+	border-color:rgb(221, 221, 221);
+}
+.chart{
+	height:240px;
+	width:1300px;
+	margin-top:10px;
+	padding-left:20px;
+}
+.canvas{
+	height:212px;
+	width:1280px;
+}
+.cTitle{
+	float:right;
+	margin-top:5px;
+	margin-right:10px;
+}

@@ -1,0 +1,476 @@
+html, body{
+   height:100%;
+   width:100%;
+   overflow-y:auto;
+   overflow-x:auto;
+   background-color:rgb(222, 222, 222);
+   margin:0px 0px 0px 0px;
+   padding: 0px 0px 0px 0px;
+}
+a{
+ 	font-size:14px;
+ 	cursor:pointer;
+ }
+#EQStTbl tr{
+	cursor:pointer;
+}
+.container{
+	height:100%;
+	width:100%;
+	padding-left: 0px; 
+	padding-right: 0px;
+}
+.left, .right{
+	padding-left: 0px;
+	margin:0px 0px 0px 0px;
+	padding-right: 0px;
+	background-color:white;
+	height:820px;
+}
+.left{
+	width:1400px;
+	float:left;
+	margin-right:10px;
+	border-style:none solid none none;
+	border-width:10px;
+	border-color:rgb(221, 221, 221);
+	
+}
+.right{
+	float:left;
+	width:430px;
+	height:100%;
+	padding-left:10px;
+	padding-right:10px;
+	margin-right:10px;
+}
+.rightTop{
+	padding-left:10px;
+	padding-right:10px;
+	margin-top:5px;
+}
+.rightBottom{
+	padding-left:10px;
+	padding-right:10px;
+	padding-top:20px;
+}
+.leftTop{
+	height:550px;
+	background-color:white;
+}
+.leftleft{
+	float:left;
+	width:400px;
+	height:100%;
+	padding-left:10px;
+	padding-right:10px;
+}
+.leftright{
+	float:left;
+	width:980px;
+}
+#stMsDiv{
+	float:left;
+	width:360px;
+	height:480px;
+	padding-left:20px;
+	padding-right:10px;
+}
+#map{
+	float:left;
+	width:600px;
+	height:452px;
+	padding-left:10px;
+}
+.leftBottom{
+	width:100%;
+	height:250px;
+	margin-left:10px;
+	margin-right:10px;
+	margin-top:10px;
+	padding-bottom:10px;
+	background-color:white;
+}
+#magChartDiv{
+	height:150px;
+	width:900px;
+	background-color:rgb(256, 256, 256);
+	margin-left:10px;
+	margin-right:10px;
+}
+#greyDiv{
+	height:10px;
+	width:100%;
+	background-color:rgb(222, 222, 222);
+}
+#reportChartDiv{
+	width:100%;
+	height:300px;
+	margin-top:50px;
+	padding-left:50px;
+	background-color:white;
+}
+.btRed{
+    text-align:center;
+    height:28px;
+    font-size:14px;
+    background-color:red;
+    color:white;
+    line-height:28px;
+    vertical-align:middle;
+}
+.btR{
+	width:80px;
+	height:26px;
+	background-color:rgb(120, 120, 120);
+	text-align:center;
+	padding-top:5px;
+	color:white;
+}
+.rpDiv{
+    width:100%;
+    height:120px;
+    cursor:pointer;
+    margin-bottom:5px;
+}
+.rpLeftLine{
+    float:left;
+    background-color:rgb(176, 176, 176);
+    height:2px;
+    width:32px;
+    margin-top:7px;
+}
+.floatLeft{
+    float:left;
+}
+.mtop5{
+    margin-top:5px;
+}  
+.glines{
+    border-style:solid;
+    border-width:1px;
+    border-color:black;
+    background-color:white;
+}
+.rps{
+	margin-top:10px;
+	padding-left:0px;
+	float:left;
+	height:730px;
+	width:360px;
+	overflow-y:auto;
+	overflow-x:auto;
+	font-size:14px;
+}
+.rp{
+	width:100%;
+	float:right;
+}          
+.rpB{
+    width:290px;
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-left:5px;
+}
+.rpLine{
+    height:20px;
+    margin-left:3px;
+}
+.btBlue{
+	text-align:center;
+	height:28px;
+	font-size:14px;
+	background-color:#27408b;
+	color:white;
+	line-height:28px;
+	vertical-align:middle;
+}
+
+.rightReports{
+	background-color:white;
+}
+
+
+#topTab{
+	height:42px;
+}
+#warnMap,#mapInStChart{
+	height:100%;
+	width:100%;
+	margin:-5px -5px -5px -5px;
+	padding: 0px 0px 0px 0px;
+}
+.rightTop{
+	height:130px;
+	overflow-y:auto;
+	overflow-x:auto;
+	min-width:370px;
+	background-color:rgb(256, 256, 256);
+}
+.rightBottom{
+	height:30%;
+	min-width:370px;
+	background-color:rgb(256, 256, 256);
+}
+#reports, #stations{
+	padding-right: 0px; 
+	padding-left: 0px;
+}
+
+#lBDiv{
+	padding-top:10px;
+	text-decoration:underline;
+	text-align:left;
+}
+#rightTabContent.tab-content{
+	padding-top:10px;
+	padding-left: 0px;
+	overflow-y:auto;
+}
+#reportsTabContent{
+}
+.provBold{
+	font:normal bold 20px/30px arial,sans-serif;
+	margin: 20px 0px 5px 0px;
+}
+#proList{
+	height:620px;
+}
+.detail{
+	font:normal bold 16px/30px arial,sans-serif;
+	margin: 5px 0px 5px 0px;
+}
+.topTab{
+	width:100%;
+	background-color: #777777; /* #B0C4DE lightsteelblue */
+	padding:0px;
+	color:white;
+}
+thead{
+	background-color: #B0C4DE;
+}
+.table > tbody > tr.active > td{
+	background-color:#dddddd;
+}
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus{
+	color:rgb(256, 256, 256);
+	background-color:rgb(0, 0, 0);
+}
+.mainW{
+	height:820px;
+}
+select{
+	width:80px;
+	height:30px;
+	margin-top:5px;
+	margin-bottom:5px;	
+}
+.ACTopDiv{
+	width:100%;
+	height:40px;
+	padding-left:20px;
+	background-color: #B0C4DE;
+}
+.ACMapDiv{
+	float:left;
+	width:50%;
+	height:100%;
+	border:1px solid black;
+}
+#imgsDiv{
+	width:100%;
+}
+.tNodeDiv{
+	width:80%;
+	display:inline-block;
+}
+.titleDiv{
+	height:20px;
+	background-color:#AAAAAA;
+	padding-left:10px;
+} 
+.imgLDiv{
+	width:100%;
+	height:280px;
+}
+.imgDiv{
+	width:25%;
+	height:300px;
+	display:inline-block;
+}
+img{
+	width:200px;
+	float:left;
+	margin:5px;
+	cursor:pointer;
+}
+.imgNote{
+	width:100%;
+	height:30px;
+	margin:5px;
+}
+#imgs{
+	background-color:white;
+	margin-left:200px;
+	text-align:left;
+	width:1000px;
+}
+.imgs{
+	width:900px;
+	margin-top:0px;
+	margin-left:10px;
+	padding-left:10px;
+	padding-right:10px;
+}
+.imgsTitle{
+	border-style:none none solid none;
+	border-width:1px;
+	border-color:rgb(221, 221, 221);
+	font-size:14px;
+	font-weight:bold;
+}
+.imgsBasicInfo{
+	height:160px;
+	padding-top:10px;
+	padding-left:10px;
+	border:1px solid black;
+}
+.outDiv{
+	width:1850px;
+	height:820px;
+}
+.txtBold{
+	font-weight:bold;
+}
+.tBold{
+	font:normal bold 15px/25px arial,sans-serif;
+	margin: 0px 0px 0px 0px;
+}
+.WRTBold{
+	font:normal bold 15px/20px arial,sans-serif;
+	margin: 10px 0px 0px 10px;
+}
+.WR{
+	font:normal 10px/15px arial,sans-serif;
+	margin: 10px 0px 0px 30px;
+}
+.lines{
+	border-style:solid solid solid solid;
+	border-width:1px;
+	border-color:rgb(221, 221, 221);
+}
+.BLine{
+	border-style:none none solid none;
+	border-width:1px;
+	border-color:rgb(221, 221, 221);
+}
+.BTLines{
+	border-style:solid none solid none;
+	border-width:1px;
+	border-color:rgb(221, 221, 221);
+}
+.rails{
+	margin: 5px 0px 5px 0px;
+}
+.consoleDiv{
+	background-color:#f0f0f0;
+	height:30px;
+	width:100%;
+	text-align:center;
+}
+#console{
+	float:left;
+	text-align:center;
+	height:100%;
+	width:100px;
+	line-height:28px;
+	overflow:hidden;
+	font-size:14px;
+	border-style:none solid none none;
+	border-width:1px;
+	border-color:#868585;
+}
+#startBt{
+	float:left;
+	height:100%;
+	width:30px;
+	background-image: url(../img/start.png);
+	background-size:14px 14px;
+	background-repeat:no-repeat;
+	background-position:center;
+	cursor:pointer;
+}
+#endBt{
+	float:left;
+	height:100%;
+	width:30px;
+	background-image: url(../img/end.png);
+	background-size:14px 14px;
+	background-repeat:no-repeat;
+	background-position:center;
+	cursor:pointer;
+}
+#ps{
+	height:60px;
+	width:100%;
+	margin-top:10px;
+	margin-bottom:10px;
+}
+#p{
+	float:left;
+	height:50px;
+	width:50%;
+	margin-top:10px;
+	margin-bottom:0px;
+	text-align:center;
+}
+#s{
+	float:left;
+	height:50px;
+	width:50%;
+	margin-top:10px;
+	margin-bottom:0px;
+	text-align:center;
+}
+#stationsDiv{
+	width:100%;
+	height:250px;
+	margin-top:10px;
+}
+#warns{
+	width:100%;
+	height:220px;
+	overflow-y:auto;
+	margin-top:10px;
+}
+.mapInStChartDiv{
+	height:250px;
+	width:350px;
+	float:left;
+}
+.magChartInStChartDiv{
+	height:250px;
+	width:850px;
+	float:left;
+	overflow-y:auto;
+	
+}
+
+.ChartsDiv{
+	margin-top:10px;
+	padding-left:10px;
+}
+.chart{
+	height:240px;
+	width:1100px;
+	margin-top:10px;
+}
+.canvas{
+	height:212px;
+	width:1100px;
+}
+.cTitle{
+	float:right;
+	margin-top:5px;
+	margin-right:10px;
+}

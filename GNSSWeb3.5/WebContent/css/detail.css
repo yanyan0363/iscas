@@ -1,0 +1,41 @@
+html, body{
+         	height:100%;
+         	width:100%;
+         	overflow-y:auto;
+         	overflow-x:auto;
+         }
+    .container{
+        height:100%;
+        width:100%;
+        padding-left: 0px; 
+        padding-right: 0px;
+    } 
+    .left, .right{
+        height:100%;
+        padding-left: 0px;
+        margin:0px 0px 0px 0px;
+        padding-right: 0px;
+    }
+    .leftTop{
+    	height:70%;
+    	margin:0px 0px 0px 0px;
+    	padding: 0px 0px 0px 0px;
+    }
+	
+    .rightTop{
+    	height:70%;
+    	overflow-y:auto;
+    	overflow-x:auto;
+    	min-width:380px;
+    }
+	.rightBottom{
+		height:30%;
+		min-width:380px;
+	}
+	#map, #magGra{
+		height:100%;
+	}
+	.leftBottom, #reports, #stations, #lineChartDiv{
+		padding-right: 0px; 
+		padding-left: 0px;
+	}

@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<meta charset="UTF-8">
+<title>查看数据</title>
+<script src="js/jquery-3.2.0.min.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="css/bootstrap.css">
+<!-- Optional theme -->
+<link rel="stylesheet" href="css/bootstrap-theme.css" >
+<!-- Latest compiled and minified JavaScript -->
+<script src="js/bootstrap.js"></script>
+<!-- bootstrap-table -->
+<link rel="stylesheet" href="css/bootstrap-table.css">
+<script src="js/bootstrap-table.js"></script>
+<script src="js/bootstrap-table-zh-CN.min.js"></script>
+
+<link rel="stylesheet" href="js/arcgis/3.20/esri/css/esri.css">
+<style>  
+        html, body{
+         	height:100%;
+         	width:100%;
+         	overflow-y:auto;
+         	overflow-x:auto;
+         }
+        #canvasX,#canvasY,#canvasZ{
+        	width:600px;
+        	height:150px;
+        }
+    </style>  
+    <script>
+    	
+    </script>
+</head>
+<body>
+	<div class="container" style="width:100%;height:100%;padding-left: 0px; padding-right: 0px;">
+		<div class="col-md-9" style="width:85%;height:100%; padding-left: 0px; padding-right: 0px;">
+			<div style="width:100%;height:70%">
+				<div id="map" style="width:100%;height:100%"></div>
+			</div>
+			<div style="padding-left:5px;width:100%;height:20px;background-color:#AAAAAA;">查看台站数据，当前台站：<span id="stationID">无</span></div>
+			<div id="chartsDiv" style="width:100%;padding-left: 3px;">
+					<div id="horizon" class="col-md-8" style="float:left;width:50%;height:100%;min-width:600px;padding-left:2px;border-right:1px solid black;">
+						<span style="float:right;">水平位移</span>
+						<div id="horizonChart" style="width:100%;min-width:600px;min-height:150px;padding-left: 3px;"></div>
+					</div>
+					<div id="vertical" class="col-md-8" style="float:left;width:50%;height:100%;min-width:600px;padding-left: 2px;">
+						<span style="float:right;">垂直位移</span>
+						<div id="verticalChart" style="width:100%;min-width:600px;min-height:150px;padding-left: 3px;"></div>
+					</div>
+					<!-- 
+				<div id="overStations" style="overflow-y:auto;width:100%;height:100%">
+					<table id="overStationsTable" class="table table-striped table-bordered table-hover"></table>
+				</div>
+					-->
+			</div>
+		</div>
+		<div class="col-md-3" id="stations" style="width:15%;height:100%;padding-left: 1px;padding-right: 5px;">
+			<div style="border:1px solid black;height:60px;text-align:center;padding-top:10px;" onclick="chartsDetail();">
+				<img src="img/32112.jpg" style="width:40px;height:40px;">
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:void(0);" style="font-size:16px;">查看数据</a>
+			</div>
+			<div id="tableDiv" style="overflow:auto;">
+				<table id="stationsTable" class="table table-striped table-bordered table-hover"></table>
+			</div>
+		</div>
+	</div> 
+<script src="js/echarts.js"></script>
+<script src="js/arcgis/3.20/init.js"></script>
+<script>
+var clientHeight = parent.getClientHeight();
+var tableHeight = clientHeight-165;
+var chartsHeight = (clientHeight-100)*0.3-25;
+//alert("tableHeight::"+tableHeight+"\nchartsHeight::"+chartsHeight);
+$("#tableDiv").outerHeight(tableHeight);
+$("#chartsDiv").outerHeight(chartsHeight);
+$("#horizonChart").outerHeight(chartsHeight-20);
+$("#verticalChart").outerHeight(chartsHeight-20);
+var curStation;
+var bottomHChart,bottomVChart;
+var XChart,YChart,ZChart;
+var stationArray = new Array();
+var map, mapCenter,baseLayer;  
+var visible=[];
+var clickPoint;
+var baseDefinitions = [];//baseLayer的过滤条件
+var params;
+var geometryService;
+var greySymbol;
+var greenSymbol;
+var redSymbol;
+var stationLayer=2;
+require(["esri/symbols/PictureMarkerSymbol"], function(PictureMarkerSymbol)  
+{
+	greySymbol = new PictureMarkerSymbol("img/fill-grey-16.png", 16, 16);
+	greenSymbol = new PictureMarkerSymbol("img/fill-green-16.png", 16, 16);
+	redSymbol = new PictureMarkerSymbol("img/fill-red-16.png", 16, 16);
+}); 
+
+require(["esri/map","esri/layers/ArcGISDynamicMapServiceLayer"], function(Map,ArcGISDynamicMapServiceLayer)  
+{  
+    map = new Map("map", {logo:false,slider: true});  
+    baseLayer = new esri.layers.ArcGISDynamicMapServiceLayer("http://"+parent.serverIP+":6080/arcgis/rest/services/GNSSBaseXian80E102/MapServer");
+    baseLayer.setVisibleLayers([17,20]);//[2,10,11]
+    map.addLayer(baseLayer, 0);
+	mapCenter = new esri.geometry.Point(104,30.5);//四川
+    map.centerAt(mapCenter);
+    map.setScale(5000000);
+    map.on("load", function(){
+    	addCenterPoint();
+		drawStations();//在drawStations的最后reDrawStations，以保证重绘制的有效性
+	    map.graphics.on("click", function(event){
+	    	//alert("map.graphics.click...\n"+event.mapPoint+"\n"+event.screenPoint+"\n"+event.graphic+"::"+event.graphic.attributes.ID);
+	    	curStation = event.graphic.attributes.ID;//表示台站ID
+        	$("#stationID").text(curStation);
+	    	showLineCharts(curStation,event.mapPoint);
+	    });
+    });
+}); 
+function drawStations(){
+	//实例化查询参数
+	var query = new esri.tasks.Query();
+	query.outFields = ["stationID"];
+	query.outSpatialReference = map.spatialReference;
+	query.spatialRelationship = esri.tasks.Query.SPATIAL_REL_INTERSECTS;
+	query.returnGeometry = true;
+	query.where = "1=1";
+	//实例化查询对象
+	var queryTask = new esri.tasks.QueryTask("http://"+parent.serverIP+":6080/arcgis/rest/services/GNSSBaseXian80E102/MapServer/" + stationLayer);
+	//进行查询
+	queryTask.execute(query, showStationsResult);
+}
+function showStationsResult(result){
+	if(result.features == 0){
+		//alert("没有该元素");
+		return;
+	}
+	stationArray = new Array();
+	for(var i = 0; i < result.features.length; i++){
+		//获得该图形的形状
+        var feature = result.features[i];
+        var attr = feature.attributes;
+        var geometry = feature.geometry;
+        //创建客户端图形
+        var infoGraphic = new esri.Graphic(geometry, greySymbol);
+        infoGraphic.setAttributes({"ID":attr.StationID});
+        stationArray.push("{\"ID\":\""+attr.StationID+"\",\"color\":\"grey\"}");
+        //将客户端图形添加到map中
+        map.graphics.add(infoGraphic);
+	}
+	initStationsTable("["+stationArray+"]");
+	reDrawStations();
+}
+//重新绘制台站，包括位移量大的台站(redSymbol)和位移量正常的台站(greenSymbol)
+function reDrawStations(){
+	$.ajax({
+		type:"get",
+		url:"http://"+parent.serverIP+":8090/GNSS/getCurStationFamily",
+		dataType:'jsonp',//异步
+		jsonp:'callback',
+		success:function(msg){
+			var overStationsArray = new Array();
+			if(msg == undefined){
+				return;
+			}
+			var graphics = map.graphics.graphics;
+			for(var j=1;j<graphics.length;j++){
+				var flag = false;
+				for(var i=0;i<msg.inSt.length;i++){
+					if(msg.inSt[i] == graphics[j].attributes.ID){
+						graphics[j].setSymbol(greenSymbol);
+						$("#"+msg.inSt[i]+"Img").attr("src", "img/fill-green-16.png");
+						$("#"+msg.inSt[i]+"State").text("非活跃");
+						flag = true;
+						break;
+					}
+				}
+				if(flag){
+					continue;
+				}
+				for(var i=0;i<msg.overSt.length;i++){
+					if(msg.overSt[i] == graphics[j].attributes.ID){
+						graphics[j].setSymbol(redSymbol);
+						$("#"+msg.overSt[i]+"Img").attr("src", "img/fill-red-16.png");
+						$("#"+msg.overSt[i]+"State").text("活跃");
+						flag = true;
+						break;
+					}
+				}
+				if(flag){
+					continue;
+				}
+				graphics[j].setSymbol(greySymbol);
+				$("#"+ graphics[j].attributes.ID+"Img").attr("src", "img/fill-grey-16.png");
+				$("#"+ graphics[j].attributes.ID+"State").text("暂无数据");
+			}
+			map.graphics.redraw();
+			if(msg.overSt.length > 0){
+				parent.warnNewEQ();
+			}else{
+				parent.cancelWarnNewEQ();
+			}
+			/**
+			for(var i=0;i<msg.inSt.length;i++){
+				for(var j=1;j<graphics.length;j++){
+					if(msg.inSt[i] == graphics[j].attributes.ID){
+						graphics[j].setSymbol(greenSymbol);
+						break;
+					}
+				}
+				$("#"+msg.inSt[i]+"Img").attr("src", "img/fill-green-16.png");
+				$("#"+msg.inSt[i]+"State").text("非活跃");
+			}
+			for(var i=0;i<msg.overSt.length;i++){
+				for(var j=1;j<graphics.length;j++){
+					if(msg.overSt[i] == graphics[j].attributes.ID){
+						graphics[j].setSymbol(redSymbol);
+						overStationsArray.push("{\"ID\":\""+msg.overSt[i]+"\"}");
+						break;
+					}
+				}
+				$("#"+msg.overSt[i]+"Img").attr("src", "img/fill-red-16.png");
+				$("#"+msg.overSt[i]+"State").text("活跃");
+			}
+			map.graphics.redraw();
+			**/
+		},
+		error:function(XMLHttpRequest, textStatus, errorThrown){
+			//alert(XMLHttpRequest.status+"\n"+XMLHttpRequest.statusText+"\n"+XMLHttpRequest.responseText +"\n"+XMLHttpRequest.readyState+"\n"+textStatus+"\n"+errorThrown);
+			alert("获取告警台站列表出错了，请联系管理员");
+		}
+	});
+}
+function warnNewEQ(){
+	
+}
+function initStationsTable(datas) {
+	var dd = eval(datas);
+	$('#stationsTable').bootstrapTable({
+        striped:true,
+        cache:false,
+        pagination:false,
+        pageSize:18,
+        sortable:false,
+        data:dd,
+        showFooter:false,
+        clickToSelect:false,
+        rowStyle:function rowStyle(row, index){
+        	return {
+        	    css: {"font-size":"12px"}
+        	  };
+        },
+        columns:[
+        	{
+        		checkbox:true
+        	},
+        	{
+        		field:'ID',
+        		title:'台站列表',
+            	formatter:function (value, row, index){
+        			return ["<img id='"+value+"Img' src='img/fill-"+row.color+"-16.png'/>"+value].join('');
+        			//return ["<img src='img/fill-red-16.png'/>"+value].join('');
+        		}
+        	},
+        	{
+        		field:'state',
+        		title:'状态',
+        		formatter:function(value, row, index){
+        			if(row.color=='green'){
+        				return ["<div id='"+row.ID+"State'>非活跃</div>"].join('');
+        			}else if(row.color=='red'){
+        				return ["<div id='"+row.ID+"State'>活跃</div>"].join('');
+        			}else if(row.color=='grey'){
+        				return ["<div id='"+row.ID+"State'>暂无数据</div>"].join('');
+        			}else{
+        				return ["<div id='"+row.ID+"State'>未知</div>"].join('');
+        			}
+        		}
+        	},
+        	{
+        		field:'loc',
+        		title:'所属地'
+        	}
+        ],
+        onClickRow:function (row){
+        	//alert($("#"+row.ID+"State")+"\n"+$("#"+row.ID+"State").text());
+        	if($("#"+row.ID+"State").text()=="暂无数据"){
+        		return;
+        	}
+        	curStation = row.ID;//表示台站ID
+        	$("#stationID").text(curStation);
+        	var station = searchStationGraphicByID(curStation);
+        	if(station == null || station == undefined){
+        		alert("未搜索到相应的台站");
+        		return;
+        	}else{
+        		showLineCharts(curStation,station.geometry);
+        	}
+        }
+    });
+}
+function chartsDetail(){
+	var a = $('#stationsTable').bootstrapTable("getSelections");
+	if(a.length > 0){
+		var stationArray = new Array();
+		for(var i=0; i < a.length; i++){
+			stationArray.push(a[i].ID);
+		}
+		//alert(stationArray);
+		window.location.href = "./charts.html?stations="+stationArray;
+	}else{
+		alert('请选择台站');
+	}
+}
+function searchStationGraphicByID(stationID){
+	var graphics = map.graphics.graphics;
+	for(var i=1;i<graphics.length;i++){
+		if(stationID == graphics[i].attributes.ID){
+			return graphics[i];
+		}
+	}
+}
+
+
+function handleStationResult(queryResult){
+	if(queryResult.features == 0){
+		//alert("没有该元素");
+		return;
+	}
+	if(queryResult.features.length > 0){
+		//获得该图形的形状
+        var feature = queryResult.features[0];
+        var showPoint = feature.geometry;
+        var attr = feature.attributes;
+		//alert(i+":"+attr.StationID);
+		//加载台站的位移曲线图
+		showLineCharts(attr.StationID,showPoint);
+	}
+}
+
+function showLineCharts(stationID,showPoint){
+	var lineChartDiv = document.createElement("div");
+	lineChartDiv.id = "lineChartDiv";
+	lineChartDiv.style = "width:630 ";
+	var labelX = document.createElement("label");
+	labelX.innerHTML = "东西向位移";
+	lineChartDiv.appendChild(labelX);
+//	var canvasX = document.createElement("canvas");
+	var canvasX = document.createElement("div");
+	canvasX.id = "canvasX";
+	//canvasX.width = 600;
+	//canvasX.height = 150;
+	lineChartDiv.appendChild(canvasX);
+	var labelY = document.createElement("label");
+	labelY.innerHTML = "南北向位移";
+	lineChartDiv.appendChild(labelY);
+	//var canvasY = document.createElement("canvas");
+	var canvasY = document.createElement("div");
+	canvasY.id = "canvasY";
+	canvasY.width = 600;
+	canvasY.height = 150;
+	lineChartDiv.appendChild(canvasY);
+	var labelZ = document.createElement("label");
+	labelZ.innerHTML = "地心向位移";
+	lineChartDiv.appendChild(labelZ);
+	//var canvasZ = document.createElement("canvas");
+	var canvasZ = document.createElement("div");
+	canvasZ.id = "canvasZ";
+	canvasZ.width = 600;
+	canvasZ.height = 150;
+	lineChartDiv.appendChild(canvasZ);
+
+	$.ajax({
+		type:"get",
+		url:"http://127.0.0.1:8090/GNSS/stationDisplacement",
+		data:{
+			station:stationID
+		},
+		dataType:'jsonp',
+		jsonp:'callback',
+		timeout:1000,
+		success:function(msg){
+			if(msg == undefined){
+				alert("暂无数据");
+				return;
+			}
+			showBottomLineCharts(msg);
+			showFloatCharts(msg,canvasX,canvasY,canvasZ);
+			//showFloatCharts(msg.x.time,msg.x.dis,canvasX,XChart);
+			//showFloatCharts(msg.y.time,msg.y.dis,canvasY,YChart);
+			//showFloatCharts(msg.z.time,msg.z.dis,canvasZ,ZChart);
+		},
+		error:function(XMLHttpRequest, textStatus, errorThrown){
+			//alert(XMLHttpRequest.status+"\n"+XMLHttpRequest.statusText+"\n"+XMLHttpRequest.responseText +"\n"+XMLHttpRequest.readyState+"\n"+textStatus+"\n"+errorThrown);
+			alert("出错了，请联系管理员");
+		}
+	});
+	map.infoWindow.setContent(lineChartDiv);
+	map.infoWindow.setTitle(stationID+"位移曲线");
+	map.infoWindow.resize(640,800);
+	map.infoWindow.show(showPoint);
+	map.centerAt(showPoint);
+}
+
+function showFloatCharts(msg,canvasX,canvasY,canvasZ){
+	// 指定图表的配置项和数据
+    var option = setOpt(msg.x.time,msg.x.dis);
+    XChart = echarts.init(canvasX);
+    XChart.setOption(option);
+    
+    option = setOpt(msg.x.time,msg.x.dis);
+    YChart = echarts.init(canvasY);
+    YChart.setOption(option);
+    
+    option = setOpt(msg.x.time,msg.x.dis);
+    ZChart = echarts.init(canvasZ);
+    ZChart.setOption(option);
+}
+function setOpt(label,data){
+	// 指定图表的配置项和数据
+    var option = {
+			title: {
+				show:false,
+			},
+			grid: {
+				show: true,
+				top: 40,
+				bottom: 30,
+				left:60,
+				right: 45
+			},
+    	    tooltip: {
+    	        trigger: 'axis'
+    	    },
+    	    xAxis:  {
+    	        name: '时间',
+    	        nameLocation: 'end',
+    	        nameGap: 10,
+    	        nameTextStyle: {
+    	        	fontSize:10
+    	        },
+    	        axislabel:{
+    	        	textStyle:{
+    	        		fontSize:6
+    	        	}
+    	        },
+    	        boundaryGap: false,
+    	    	type: 'category',
+    	        data: label,
+    	    },
+    	    yAxis: {
+    	        type: 'value',
+    	    	name: '位移(m)',
+    	        nameLocation: 'end',
+    	        nameGap: 10,
+    	        nameTextStyle: {
+    	        	fontSize:10
+    	        },
+    	        axisLabel: {
+    	            formatter: '{value}',
+    	        }
+    	    },
+    	    series: [
+    	        {
+    	            name:'位移',
+    	            type:'line',
+    	            data:data,
+    	            markPoint: {
+    	            	symbolSize: 46,
+    	            	data: [
+    	                    {type: 'max', name: '最大值'},
+    	                    {type: 'min', name: '最小值'}
+    	                ]
+    	            }
+    	        }
+    	    ]
+    	};
+	return option;
+}
+function showBottomLineCharts(msg){
+	// 指定图表的配置项和数据
+    var option = {
+			title: {
+				show:false,
+			},
+			grid: {
+				show: true,
+				top: 40,
+				bottom: 30,
+				left:65,
+				right: 60
+			},
+    	    tooltip: {
+    	        trigger: 'axis'
+    	    },
+    	    xAxis:  [{
+    	        name: '时间',
+    	        nameLocation: 'end',
+    	        nameGap: 10,
+    	        nameTextStyle: {
+    	        	fontSize:10
+    	        },
+    	        axislabel:{
+    	        	textStyle:{
+    	        		fontSize:6
+    	        	}
+    	        },
+    	        boundaryGap: false,
+    	    	type: 'category',
+    	        data: msg.dis2D.time,
+    	    }],
+    	    yAxis: [{
+    	        type: 'value',
+    	    	name: '位移(m)',
+    	        nameLocation: 'end',
+    	        nameGap: 10,
+    	        nameTextStyle: {
+    	        	fontSize:10
+    	        },
+    	        axisLabel: {
+    	            formatter: '{value}',
+    	        }
+    	    }],
+    	    series: [
+    	        {
+    	            name:'位移',
+    	            type:'line',
+    	            data: msg.dis2D.dis,
+    	            markPoint: {
+    	            	symbolSize: 46,
+    	            	data: [
+    	                    {type: 'max', name: '最大值'},
+    	                    {type: 'min', name: '最小值'}
+    	                ]
+    	            }
+    	        }
+    	    ]
+    	};
+	bottomHChart = echarts.init(document.getElementById("horizonChart"));
+	bottomHChart.setOption(option);
+	option = {
+			title: {
+				show:false,
+			},
+			grid: {
+				show: true,
+				top: 40,
+				bottom: 30,
+				left:65,
+				right: 60
+			},
+    	    tooltip: {
+    	        trigger: 'axis'
+    	    },
+    	    xAxis:  [{
+    	        name: '时间',
+    	        nameLocation: 'end',
+    	        nameGap: 10,
+    	        nameTextStyle: {
+    	        	fontSize:10
+    	        },
+    	        axislabel:{
+    	        	textStyle:{
+    	        		fontSize:6
+    	        	}
+    	        },
+    	        boundaryGap: false,
+    	    	type: 'category',
+    	        data: msg.z.time,
+    	    }],
+    	    yAxis: [{
+    	        type: 'value',
+    	    	name: '位移(m)',
+    	        nameLocation: 'end',
+    	        nameGap: 10,
+    	        nameTextStyle: {
+    	        	fontSize:10
+    	        },
+    	        axisLabel: {
+    	            formatter: '{value}',
+    	        }
+    	    }],
+    	    series: [
+    	        {
+    	            name:'位移',
+    	            type:'line',
+    	            data: msg.z.dis,
+    	            markPoint: {
+    	            	symbolSize: 46,
+    	            	data: [
+    	                    {type: 'max', name: '最大值'},
+    	                    {type: 'min', name: '最小值'}
+    	                ]
+    	            }
+    	        }
+    	    ]
+    	};
+	bottomVChart = echarts.init(document.getElementById("verticalChart"));
+	bottomVChart.setOption(option);
+}
+function refreshCharts(){
+	if(!curStation){
+		//alert("!curStation");
+		return;
+	}
+	$.ajax({
+		type:"get",
+		url:"http://127.0.0.1:8090/GNSS/stationDisplacement",
+		data:{
+			station:curStation
+		},
+		dataType:'jsonp',
+		jsonp:'callback',
+		success:function(msg){
+			if(msg == undefined){
+				//alert("暂无数据");
+				return;
+			}
+		    //bottomHChart refresh
+		    var option = bottomHChart.getOption();
+		    option.series[0].data=msg.dis2D.dis;
+		    option.xAxis[0].data=msg.dis2D.time;
+		    bottomHChart.setOption(option);
+		    //bottomVChart refresh
+		    option = bottomVChart.getOption();
+		    option.series[0].data=msg.z.dis;
+		    option.xAxis[0].data=msg.z.time;
+		    bottomVChart.setOption(option);
+		    //XChart refresh
+		    option = XChart.getOption();
+		    option.series[0].data=msg.x.dis;
+		    option.xAxis[0].data=msg.x.time;
+		    XChart.setOption(option);
+		    //YChart refresh
+		    option = YChart.getOption();
+		    option.series[0].data=msg.y.dis;
+		    option.xAxis[0].data=msg.y.time;
+		    YChart.setOption(option);
+		    YChart.refresh;
+		    //ZChart refresh
+		    option = ZChart.getOption();
+		    option.series[0].data=msg.z.dis;
+		    option.xAxis[0].data=msg.z.time;
+		    ZChart.setOption(option);
+		},
+		error:function(XMLHttpRequest, textStatus, errorThrown){
+			//alert(XMLHttpRequest.status+"\n"+XMLHttpRequest.statusText+"\n"+XMLHttpRequest.responseText +"\n"+XMLHttpRequest.readyState+"\n"+textStatus+"\n"+errorThrown);
+			alert("图表刷新出错了，请联系管理员");
+		}
+	});
+}
+setInterval(function(){
+	//alert("setInterval");
+	reDrawStations();
+	//initStationsTable("["+stationArray+"]");
+	refreshCharts();
+  },2000);  
+
+function addCenterPoint(){
+	mapCenter = new esri.geometry.Point(647399,3445475,map.spatialReference);
+    map.centerAt(mapCenter);
+	//var symbol = new esri.symbol.PictureMarkerSymbol("img/lc.png", 32, 32);
+	//var attr = {"0":"attr0","1":"attr1","2":"attr2","3":"attr3"};
+	//var infoTemplate = new esri.InfoTemplate("${0}", "${1}:attr1 value.<br/>${2}:attr2 value.<br/>${3}:attr3 value.<br/>");
+	//var graphic = new esri.Graphic(mapCenter, symbol, attr, infoTemplate);
+	//map.graphics.add(graphic);
+}
+</script>  
+</body>
+</html>

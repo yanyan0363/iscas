@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">  
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>  
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <title>系统管理</title>  
+	<script src="js/jquery-3.2.0.min.js"></script>
+	    
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="js/bootstrap.js"></script>
+</head>
+<body>
+
+	<div style="width:600px;margin: 0 auto;padding-top: 20px;">
+		<div id="modeRight" style="width:300px;">
+			<div style="float:left;">
+				<h4>分析模式：</h4>
+			</div>
+			<div data-toggle="buttons" class="btn-group right active"  style="float:left;">
+				<label class="btn btn-default" id="MANUALLabel"><input name="mode" type="radio" id="MANUAL" value="分析" onchange="changeMode();"/>开 </label>
+				<label class="btn btn-default active" id="AUTOLabel"><input name="mode" type="radio" id="AUTO" value="监控" onchange="changeMode();"/>关</label> 
+			</div>
+		</div>
+		<br>
+		<div id="fileRight" style="width:500px;margin-top:50px;display:none;">
+			<div style="float:left;">
+				<form id="fileForm" enctype="multipart/form-data" method="post" target="_self">
+					<label class="label label-default" style="margin-bottom: 0px;">上传文件：</label>
+					<div id="fileDiv" class="input-group">
+						<input id="docPath" type="text" class="form-control" disabled="disabled">
+						<span id="scan" style="position:relative;" class="btn btn-primary input-group-addon">
+					        	浏览
+						<input type="file" name="file" id="file" style="width:70px;height:40px;position:absolute;top:-5px;left:-14px;opacity:0;filter:alpha(opacity=0)" class="form-control" >
+						</span>
+					</div>
+				</form>
+			</div>
+			<div style="float:left;bottom:0px;height:40px;">
+				<input type="button" style="margin-top: 19px; margin-left: 10px;" class="btn btn-primary" value="上传" onclick="fileFormSubmit();" >
+			</div>
+		</div>
+			<br><br><br><br><br><br>
+			<div id="note" style="font:normal 14px/1.5em 'Microsoft YaHei';">
+				<h4 class="tab-h4">当前模式：<span id="modeText"></span></h4>
+				<h4 class="tab-h4">说明：</h4>
+				<p class="tab-p">&nbsp;&nbsp;1.监控模式：系统实时获取台站位移数据并解析，生成时报。</p>
+				<p class="tab-p">&nbsp;&nbsp;2.分析模式：通过【上传文件】功能，手动上传数据文件，系统解析当前数据文件，生成时报。</p>
+				<p class="tab-p">&nbsp;&nbsp;3.当前模式为分析模式时，【上传文件】功能可用。</p>
+			</div>
+				
+	</div>
+</body>
+<script type="text/javascript">
+	initMode();
+	function fileFormSubmit(){
+		if($('#file').val()==""){
+			alert("请选择数据文件！");
+			return;
+		}
+		$.ajax({
+			type:"post",
+			url:"servlet/isTaskAvailable",
+			async:false,
+			cache: false,  
+	        contentType: false,  
+	        processData: false, 
+			error:function(){
+				alert('分析任务状态获取失败，请联系管理员。');
+			},
+			success:function(data){
+				if(data=='true'){
+					uploadFile();
+				}else{
+					alert('系统存在正在运行的分析任务，请稍后重试！');
+				}
+			}
+		});
+		
+	}
+	function uploadFile(){
+		var formData = new FormData($('#fileForm')[0]);
+		$.ajax({
+			type:"post",
+			url:"servlet/UploadFile",
+			data:formData,
+			async:false,
+			cache: false,  
+	        contentType: false,  
+	        processData: false, 
+			error:function(){
+				alert('文件上传失败，请稍后再试。');
+			},
+			success:function(data){
+				alert('文件上传成功，开始解析。');
+				data = eval('('+data+")");
+				if(data.result==true){//+"?filePath="+filePath
+					noticeAnalysFile(data.noticeURL,data.filePath);
+				}
+				window.location.href="./TaskInfo.html";
+			}
+		});
+	}
+	function noticeAnalysFile(noticeURL, filePath){
+		$.ajax({
+			type:"get",
+			url:noticeURL+"?filePath="+filePath,
+			dataType:'jsonp',
+			jsonp:'callback',
+			success:function(msg){
+				if(msg != undefined){
+					alert(msg.msg);
+				}
+				window.location.href="./TaskInfo.html";
+			},
+			error:function(XMLHttpRequest, textStatus, errorThrown){
+				alert("出错了，请联系管理员\n"+XMLHttpRequest.status+"\n"+textStatus+"\n"+errorThrown);
+			}
+		});
+	}
+	function changeMode(){
+		var toMode  = $('input[name="mode"]:checked');
+		if(!confirm("确定修改模式为"+toMode.val()+"模式？")){
+			return;
+		}
+		$.ajax({
+			type:"get",
+			url:"http://"+parent.serverIP+":8090/GNSS/changeMode",
+			data:{
+				toMode:toMode.attr('id')
+			},
+			dataType:'jsonp',
+			jsonp:'callback',
+			timeout:1000,
+			success:function(msg){
+				if(msg == undefined){
+					alert("暂无数据");
+					return;
+				}
+				$("[type='radio']").removeAttr("checked");
+				$("#"+toMode.attr('id')).attr("checked","checked");
+				updateModeText(toMode.attr('id'));
+				updateModeNote(toMode.attr('id'));
+				updateFile(toMode.attr('id'));
+			},
+			error:function(){
+				alert("出错了，请联系管理员。");
+			}
+		});
+	}
+	function updateModeNote(toMode){
+		if(toMode == "MANUAL"){
+			$("#modeNote",window.parent.document).text("分析");
+		}else if(toMode == "AUTO"){
+			$("#modeNote",window.parent.document).text("监控");
+		}
+	}
+	function initMode(){
+		$.ajax({
+			type:"get",
+			url:"http://"+parent.serverIP+":8090/GNSS/getMode",
+			dataType:'jsonp',
+			jsonp:'callback',
+			success:function(msg){
+				var mode = msg.mode;
+				if(msg == undefined){
+					alert("暂无数据");
+					return;
+				}
+				$("label").removeClass("active");
+				$("#"+mode+"Label").addClass("active");
+				updateModeText(mode);
+				updateFile(mode);
+			},
+			error:function(){
+				alert("获取模式出错了，请联系管理员。");
+			}
+		});
+	}
+	function updateFile(toMode){
+		if(toMode == "MANUAL"){
+			$("#fileRight").show();
+		}else if(toMode == "AUTO"){
+			$("#fileRight").hide();
+		}
+	}
+	function updateModeText(toMode){
+		if(toMode == "MANUAL"){
+			$("#modeText").text("分析模式");
+		}else if(toMode == "AUTO"){
+			$("#modeText").text("监控模式");
+		}else{
+			$("#modeText").text("未知");
+		}
+	}
+	function showRight(id){
+		if($("#"+id+"LI").is(".disabled") || $("#"+id+"LI").hasClass(".disabled")){
+			alert('当前模式为自动模式，上传文件不可用。');
+			return;
+		}
+		$("div.right").hide();
+		$("#"+id+"Right").show();
+	}
+	$("#file").change(function () {
+	    $("#docPath").val($(":file").val());
+	});
+
+</script>
+</html>

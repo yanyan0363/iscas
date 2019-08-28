@@ -1,0 +1,32 @@
+package servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import dbHelper.GNSSDBHelper;
+
+public class GetCurReportStationsServlet extends HttpServlet{
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		doPost(req, resp);
+	}
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		System.out.println("GetCurReportStationsServlet begin...");
+		resp.setContentType("text/html;charset=UTF-8");
+		String eqID = req.getParameter("eqID");
+		int reportNum = Integer.parseInt(req.getParameter("reportNum"));
+		String stations = GNSSDBHelper.getCurReportStations(eqID, reportNum);
+//		System.out.println(stations);
+		PrintWriter out = resp.getWriter();
+		out.write(stations);
+		out.close();
+		System.out.println("GetCurReportStationsServlet end...");
+	}
+}

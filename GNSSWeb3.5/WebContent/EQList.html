@@ -1,0 +1,157 @@
+<!DOCTYPE html>  
+<html>  
+<head>  
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">  
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>  
+    <title>地震数据</title>  
+	<script src="js/jquery-3.2.0.min.js"></script>
+	    
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="css/bootstrap-theme.css" >
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="js/bootstrap.js"></script>
+	<!-- bootstrap-table -->
+	<link rel="stylesheet" href="css/bootstrap-table.css">
+	<script src="js/bootstrap-table.js"></script>
+	<script src="js/bootstrap-table-zh-CN.min.js"></script>
+
+    <style>  
+        a,tr{
+        	cursor:pointer;
+        }
+        .outDiv{
+        	margin-top:20px;
+        	margin-left:50px;
+        	width:1600px;
+        }
+        .title{
+        	width:100%;
+        	
+        }
+        .BLine{
+        	border-style:none none solid none;
+    		border-width:1px;
+    		border-color:#3d7fd8;
+        }
+        #tableDiv{
+        	overflow:auto;
+        	margin-top:10px;
+        	width:100%;
+        }
+        .th-inner {
+        	color:rgb(256, 256, 256);
+        	background-color:rgb(85, 85, 85);
+        }
+    </style>  
+   
+</head>  
+  
+<body>
+	<div class="outDiv">
+		<div class="title BLine">
+			查看地震事件
+		</div>
+		<div id="tableDiv">
+			<table id="eqTable" class="table table-striped table-bordered table-hover">
+			</table>
+		</div>
+	</div> 
+	<script>
+	var clientHeight = parent.getClientHeight();
+	var tableHeight = clientHeight-140;
+	//$("#tableDiv").outerHeight(tableHeight);
+	$(function () {
+	    $('#eqTable').bootstrapTable({
+	        height:tableHeight,
+	        method:'get',
+	        url:'servlet/GetEQListServlet',
+	        striped:true,
+	        cache:false,
+	        pagination:true,
+	        sidePagination:"server",
+	        sortable:false,
+	        //queryParams:
+	        //pageNumber:1,
+	        sortOrder:'desc',
+	        pageSize:20,
+	        dataField: 'rows',
+	        paginationLoop:false,
+	        columns:[
+	        	{
+	        		field:'num',
+	        		title:'序号',
+	        		formatter:function (value, row, index){
+	        			return index+1;
+	        		}
+	        	},
+	        	{
+	        		field:'originTime',
+	        		title:'时间',
+	        	},
+	        	{
+	        		field:'loc',
+	        		title:'地点',
+	        	},
+	        	{
+	        		field:'GPSMag',
+	        		title:'GPS震级',
+	        	},
+	        	{
+	        		field:'MEMSMag',
+	        		title:'MEMS震级',
+	        	},
+	        	{
+	        		field:'status',
+	        		title:'状态',
+	        	},
+	        	{
+	        		field:'firstStation',
+	        		title:'首台',
+	        	},
+	        	{
+	        		field:'opt',
+	        		title:'操作',
+	        		formatter:function (value, row, index){
+	        			return '删除';
+	        		}
+	        	}
+	        	
+	        ],
+	        onClickCell: function (field, value, row, $element){
+	        	if(field == 'opt'){
+	        		deleteEQ(row.EQID);
+	        		return;
+	        	}else{
+	        		location.href = "./EQInfo.html?EQID="+row.EQID;
+	        	}
+	        }
+	    });
+	});
+	function deleteEQ(EQID){
+		$.ajax({
+			type:"post",
+			url:"servlet/DeleteEQByEQID",
+			data:{
+				eqID:EQID
+			},
+			datatype:'text',
+			success:function(msg){
+				if(msg == "true"){
+					alert("删除成功");
+				}else{
+					alert("删除失败");
+				}
+			}
+		});
+	}
+	setInterval(function(){  
+		 $('#eqTable').bootstrapTable('refresh',{
+			 url:'servlet/GetEQListServlet',
+			 silent:true
+		 });
+	},2000);
+	</script>
+</body>  
+</html>

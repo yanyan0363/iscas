@@ -1,0 +1,136 @@
+	body{
+		margin:0px;
+		font: 12px "lucida Grande",Verdana,"Microsoft YaHei";
+		
+	}
+	.header, .content, .footer{
+		min-width:980px;
+	}
+	.header{
+		background:#eff4fa none repeat scroll 0 0;
+		height: 129px;
+		overflow: hidden;
+	}
+	.header_logo{
+		margin-left:40px;
+		background-image: url("../img/logo.png");
+		background-position: left center;
+		background-repeat: no-repeat;
+		background-size: 389px 109px;
+		float:left;
+		height:109px;
+		margin-top: 10px;
+		width:389px;
+	}
+	.header_link{
+		padding-right:40px;
+		padding-left:40px;
+		color: #b6b6b6;
+		line-height: 30px;
+		margin-top: 16px;
+		overflow: hidden;
+		text-align: right;
+	}
+	.content{
+		height:584px;
+		width:100%;
+		margin-top:20px;
+		position:relative;
+	}
+	.pic{
+		background-image: url("../img/china-0.jpg");
+		background-position: center center;
+		background-repeat: no-repeat;
+		background-size: 650px 584px;
+		height:584px;
+		width:50%;
+		min-width:650px;
+		margin-left:10%;
+		display:inline;
+		float:left;
+	}
+	.picRight{
+		width:20%;
+		min-width:500px;
+		display:inline;
+		margin:0 auto;
+		position:absolute;
+		text-align:center;
+		
+	}
+	.inBox{
+		width:334px;
+		height: 387px; 
+		background-color: #fff;
+		border: 1px solid #a0b1c4;
+		border-radius: 5px;
+		overflow: hidden;
+		padding: 0;
+		position: relative;
+		z-index: 12;
+		visibility: visible;
+		margin-left:10px;
+	}
+	.inHeader .switch{
+		height:46px;
+		left:10px;
+	}
+	.inHeader{
+		background-color: #f9fbfe;
+		border-bottom: 1px solid #c0cdd9;
+		font-family: "lucida Grande",Verdana,"Microsoft YaHei";
+		height: 50px;
+		position: relative;
+	}
+	.switch{
+		bottom:0px;
+		font-size:16px;
+		position:absolute;
+	}
+	.switch_btn{
+		color: #999;
+    	display: inline-block;
+    	height: 45px;
+    	line-height: 45px;
+    	outline: 0 none;
+    	text-decoration: none;
+	}
+	.switch_btn_focus{
+		color: #333;
+	    display: inline-block;
+	    height: 45px;
+	    line-height: 45px;
+	    outline: 0 none;
+	    text-decoration: none;
+	}
+	.inBtnDiv{
+		margin-top:50px;
+	}
+	.inBtn{
+		background: #c2bec9 none repeat scroll 0 0;
+    	font-weight: normal;
+	    height: 50px;
+	    line-height: 39px;
+	    outline: medium none;
+	    width: 80%;
+	    border: medium none;
+	    cursor: pointer;
+	    font-size: 18px;
+	    text-align:center;
+	    border: 1px solid #a0b1c4;
+		border-radius: 5px;
+		
+	}
+	.footer{
+		position:absolute;
+		background-color: #eff4fa;
+		border-top: 1px solid #d6dfea;
+		clear: both;
+		color: #b6b6b6;
+		left: 0;
+		line-height: 36px;
+		right: 0;
+		z-index: 2;
+		text-align:center;
+		margin:0 auto;
+	}

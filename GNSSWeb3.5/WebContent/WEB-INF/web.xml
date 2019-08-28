@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+  <display-name>ArcGISTest</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+ 
+ 
+  <servlet>
+  	<servlet-name>GetStationsInfoServlet</servlet-name>
+  	<servlet-class>servlet.GetStationsInfoServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GetStationsInfoServlet</servlet-name>
+  	<url-pattern>/servlet/GetStationsInfoServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>GetEQImgsServlet</servlet-name>
+  	<servlet-class>servlet.GetEQImgsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GetEQImgsServlet</servlet-name>
+  	<url-pattern>/servlet/GetEQImgsServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>GetEQStPTMEpiDisServlet</servlet-name>
+  	<servlet-class>servlet.GetEQStPTMEpiDisServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GetEQStPTMEpiDisServlet</servlet-name>
+  	<url-pattern>/servlet/GetEQStPTMEpiDisServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>GetEQIdx</servlet-name>
+  	<servlet-class>servlet.GetEQIdx</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GetEQIdx</servlet-name>
+  	<url-pattern>/servlet/GetEQIdx</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>GetHisDispWithMEMSByEQSt</servlet-name>
+  	<servlet-class>servlet.GetHisDispWithMEMSByEQSt</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GetHisDispWithMEMSByEQSt</servlet-name>
+  	<url-pattern>/servlet/GetHisDispWithMEMSByEQSt</url-pattern>
+  </servlet-mapping>
+ 
+  <servlet>
+  	<servlet-name>GetStInfoByEQSt</servlet-name>
+  	<servlet-class>servlet.GetStInfoByEQSt</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GetStInfoByEQSt</servlet-name>
+  	<url-pattern>/servlet/GetStInfoByEQSt</url-pattern>
+  </servlet-mapping>
+ 
+  <servlet>
+  	<servlet-name>DeleteEQByEQID</servlet-name>
+  	<servlet-class>servlet.DeleteEQByEQID</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>DeleteEQByEQID</servlet-name>
+  	<url-pattern>/servlet/DeleteEQByEQID</url-pattern>
+  </servlet-mapping>
+ 
+  <servlet>
+  	<servlet-name>GetMagByEQIDStID</servlet-name>
+  	<servlet-class>servlet.GetMagByEQIDStID</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GetMagByEQIDStID</servlet-name>
+  	<url-pattern>/servlet/GetMagByEQIDStID</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>GetWarnPSDTServlet</servlet-name>
+  	<servlet-class>servlet.GetWarnPSDTServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GetWarnPSDTServlet</servlet-name>
+  	<url-pattern>/servlet/GetWarnPSDTServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>GetWarnTMServlet</servlet-name>
+  	<servlet-class>servlet.GetWarnTMServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GetWarnTMServlet</servlet-name>
+  	<url-pattern>/servlet/GetWarnTMServlet</url-pattern>
+  </servlet-mapping>
+ 
+  <servlet>
+  	<servlet-name>GetEQMag</servlet-name>
+  	<servlet-class>servlet.GetEQMag</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GetEQMag</servlet-name>
+  	<url-pattern>/servlet/GetEQMag</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>GetMagByEQID</servlet-name>
+  	<servlet-class>servlet.GetMagByEQID</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GetMagByEQID</servlet-name>
+  	<url-pattern>/servlet/GetMagByEQID</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>GetStationReportsServlet</servlet-name>
+  	<servlet-class>servlet.GetStationReportsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GetStationReportsServlet</servlet-name>
+  	<url-pattern>/servlet/GetStationReportsServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>GetAReportServlet</servlet-name>
+  	<servlet-class>servlet.GetAReportServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GetAReportServlet</servlet-name>
+  	<url-pattern>/servlet/GetAReportServlet</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+  	<servlet-name>isTaskAvailable</servlet-name>
+  	<servlet-class>servlet.IsTaskAvailable</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>isTaskAvailable</servlet-name>
+  	<url-pattern>/servlet/isTaskAvailable</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+  	<servlet-name>GetTaskListServlet</servlet-name>
+  	<servlet-class>servlet.GetTaskListServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GetTaskListServlet</servlet-name>
+  	<url-pattern>/servlet/GetTaskListServlet</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+  	<servlet-name>UploadFile</servlet-name>
+  	<servlet-class>servlet.UploadFile</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>UploadFile</servlet-name>
+  	<url-pattern>/servlet/UploadFile</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+  	<servlet-name>GetCurReportStationsServlet</servlet-name>
+  	<servlet-class>servlet.GetCurReportStationsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GetCurReportStationsServlet</servlet-name>
+  	<url-pattern>/servlet/GetCurReportStationsServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>GetReportDetail</servlet-name>
+  	<servlet-class>servlet.GetReportDetail</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GetReportDetail</servlet-name>
+  	<url-pattern>/servlet/GetReportDetail</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>GetAlarmTime</servlet-name>
+  	<servlet-class>servlet.GetAlarmTime</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GetAlarmTime</servlet-name>
+  	<url-pattern>/servlet/GetAlarmTime</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>GetEQInfoByID</servlet-name>
+  	<servlet-class>servlet.GetEQInfoByID</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GetEQInfoByID</servlet-name>
+  	<url-pattern>/servlet/GetEQInfoByID</url-pattern>
+  </servlet-mapping>
+   <!-- 
+  <servlet>
+  	<servlet-name>GetMagByEQStation</servlet-name>
+  	<servlet-class>servlet.GetMagByEQStation</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GetMagByEQStation</servlet-name>
+  	<url-pattern>/servlet/GetMagByEQStation</url-pattern>
+  </servlet-mapping>
+   -->
+  <servlet>
+  	<servlet-name>GetEQListServlet</servlet-name>
+  	<servlet-class>servlet.GetEQListServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GetEQListServlet</servlet-name>
+  	<url-pattern>/servlet/GetEQListServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>GetReportsServlet</servlet-name>
+  	<servlet-class>servlet.GetReportsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GetReportsServlet</servlet-name>
+  	<url-pattern>/servlet/GetReportsServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>GetPublishedReportsServlet</servlet-name>
+  	<servlet-class>servlet.GetPublishedReportsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GetPublishedReportsServlet</servlet-name>
+  	<url-pattern>/servlet/GetPublishedReportsServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>GetReportsStationsServlet</servlet-name>
+  	<servlet-class>servlet.GetReportsStationsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GetReportsStationsServlet</servlet-name>
+  	<url-pattern>/servlet/GetReportsStationsServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>GetStationsDis2DZ</servlet-name>
+  	<servlet-class>servlet.GetStationsDis2DZ</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GetStationsDis2DZ</servlet-name>
+  	<url-pattern>/servlet/GetStationsDis2DZ</url-pattern>
+  </servlet-mapping>
+</web-app>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<meta charset="UTF-8">
+<title>位移曲线</title>
+<script src="js/jquery-3.2.0.min.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/bootstrap-datetimepicker.js"></script>
+<script src="js/bootstrap-datetimepicker.zh-CN.js"></script>
+<link rel="stylesheet" href="css/bootstrap.css">
+<link rel="stylesheet" href="css/bootstrap-datetimepicker.css">
+<style>  
+        html, body{
+         	height:100%;
+         	width:100%;
+         	overflow-y:auto;
+         	overflow-x:auto;
+         	margin-left:0px;
+         	margin-top:0px;
+         }
+         input[type=range]{
+                outline:none;
+            }
+            
+            input[type =range]::before{
+                content:attr(min);
+                padding-right:0px;
+            }
+            input[type =range]::after{
+                content:attr(max);
+                padding-left:0px;
+            }
+            
+            output {
+                display: block;
+                font-size: 2em;
+                font-weight: bold;
+                color: #538923;
+                width:100px;
+            }
+            .curStation{
+            	height:20px;
+            	background-color:#AAAAAA;
+            	border:1px solid black;
+            }
+            .chartsDiv{
+            	width:100%;
+            	height:220px;
+            }
+            .hChartDiv{
+            	float:left;
+            	width:48%;
+            	height:220px;
+            	min-width:500px;
+            	border-right:1px solid black;
+            	margin-left:10px;
+            }
+            .vChartDiv{
+            	float:left;
+            	width:48%;
+            	height:220px;
+            	min-width:500px;
+            	margin-left:10px;
+            }
+            canvas{
+            	width:100%;
+            	height:200px;
+            	min-width:500px;
+            }
+            .chartDiv{
+            	width:100%;
+            	height:200px;
+            	min-width:500px;
+            }
+            .floatRight{
+            	float:right;
+            	margin-right:5px;
+            }
+            #charts{
+            	margin-top:70px;
+            }
+</style>
+<script>
+	//截取URL参数
+	function getQueryString(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+		var r = window.location.search.substr(1).match(reg);
+		if (r != null) return unescape(r[2]); return null;
+	} 
+	$(function(){
+		$('#datetimepicker').datetimepicker({
+			format: "yyyy-mm-dd hh:ii:ss",
+			inline:true,
+			language:'zh-CN',
+			todayBtn:true,
+			closeBtn:true,
+			todayHighlight:true,
+			minuteStep:1,
+			isInline:true,
+			autoclose:true,
+			minView:'hour',
+			maxView:'decade',
+			linkField:"time"
+		});
+		$("#removeTime").click(function(){
+			time=null;
+		});
+	
+	}
+			);
+</script>
+</head>
+<body>
+	<div style="float:left;width:50%;height:60px;">
+        <label>选择查询时间：</label>
+    	<div class="input-group date form_datetime" id="datetimepicker" data-date-format="yyyy-mm-dd hh:ii:ss" data-link-field="dtp_input1">
+             <input class="form-control" id="time" size="16" value=" " readonly type="text">
+             <span class="input-group-addon" id="removeTime"><span class="glyphicon glyphicon-remove"></span></span>
+			 <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+			 <span class="input-group-addon" onclick="querySelect();" >查询</span>
+        </div>
+	</div>
+	<div style="float:right;width:50%;height:60px;">
+		<label>秒选择器:</label>
+		<div style="width:80%;text-align:center;margin-left:10%;">
+             <input id="second" size="16" value="" type="range" value=30 min=0 max=59>
+             <p id="secVal">30</p>
+        </div>
+	</div>
+	<div id="charts"></div>
+<script src="js/echarts.js"></script>
+<script>
+var chartMap={};
+var refExp = new RegExp(/^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/);
+$(function(){
+	setInterval(function() {
+        $("#secVal").text($("#second").val());
+        if($('#time').val()!=null && $('#time').val()!="" && refExp.test($('#time').val())){
+        	if($("#second").val()<10){
+        		$('#time').val($('#time').val().substring(0,17)+'0'+$("#second").val());
+        	}else{
+        		$('#time').val($('#time').val().substring(0,17)+$("#second").val());
+        	}
+        }
+    },1);
+});
+	function querySelect(){
+		//alert('click '+$('#time').val()+'\n'+refExp.test($('#time').val()));
+		time=$('#time').val();
+		if((time==" ") || (time==null) || (time=="") || (time==undefined)){
+			alert("请选择查询时间");
+			time=null;
+			return;
+		}
+		initCharts(time);
+	}
+
+	var stations = getQueryString("stations");
+	var time;
+	var chartsDiv = $("#charts");
+	initCharts(time);
+	var option = {
+			title: {
+				show:false,
+				text:'位移',
+				textAlign:'right',
+				right:0,
+				top:0
+			},
+			grid: {
+				show: true,
+				top: 40,
+				bottom: 30,
+				left:60,
+				right: 55
+			},
+    	    tooltip: {
+    	        trigger: 'axis'
+    	    },
+    	    xAxis:  [{
+    	        name: '时间',
+    	        nameLocation: 'end',
+    	        nameGap: 10,
+    	        nameTextStyle: {
+    	        	fontSize:10
+    	        },
+    	        axisLabel:{
+    	        	textStyle:{
+    	        		fontSize:10
+    	        	},
+    	        	margin:13
+    	        },
+    	        boundaryGap: false,
+    	    	type: 'category',
+    	        data: [],//msg.value.dis2D.time
+    	    }],
+    	    yAxis: [{
+    	        type: 'value',
+    	    	name: '位移(m)',
+    	        nameLocation: 'end',
+    	        nameGap: 10,
+    	        nameTextStyle: {
+    	        	fontSize:10
+    	        },
+    	        axisLabel: {
+    	            formatter: '{value}',
+    	        }
+    	    }],
+    	    series: [
+    	        {
+    	            name:'位移',
+    	            type:'line',
+    	            data:[],//msg.value.dis2D.dis
+    	            markPoint: {
+    	            	symbolSize: 46,
+    	            	data: [
+    	                    {type: 'max', name: '最大值'},
+    	                    {type: 'min', name: '最小值'}
+    	                ]
+    	            }
+    	        }
+    	    ]
+    	};
+	function initCharts(time){
+		chartsDiv.empty();
+		if(stations == undefined || stations==null || stations == ""){
+			return;
+		}
+		$.ajax({
+			type:"get",
+			url:"http://127.0.0.1:8090/GNSS/getStationsDis2DZ",
+			data:{
+				stations:stations,
+				time:time
+			},
+			dataType:'jsonp',
+			jsonp:'callback',
+			//timeout:1000,
+			success:function(msg){
+				if(msg == undefined){
+					alert("暂无数据");
+					return;
+				}
+				showStationCharts(msg);
+			},
+			error:function(XMLHttpRequest, textStatus, errorThrown){
+				//alert(XMLHttpRequest.status+"\n"+XMLHttpRequest.statusText+"\n"+XMLHttpRequest.responseText +"\n"+XMLHttpRequest.readyState+"\n"+textStatus+"\n"+errorThrown);
+				alert("出错了，请联系管理员");
+			}
+		});
+	}
+	function showStationCharts(msg){
+		for(var i=0;i<msg.length;i++){
+			createChart(msg[i]);
+		}
+	}
+	function createChart(msg){
+		var stationID = msg.ID;
+		var newDiv = $("<div id="+stationID+"></div>");
+		//alert(msg.ID+"\n1:"+(msg.value.dis2D.dis.length == 0) +"\n2:"+(msg.value.dis2D.time.length == 0) +"\n3:"+ (msg.value.z.dis.length == 0) +"\n4:"+ (msg.value.z.time.length == 0));
+		var curSt;
+		if(msg.value.dis2D.dis.length == 0 && msg.value.dis2D.time.length == 0 
+				&& msg.value.z.dis.length == 0 && msg.value.z.time.length == 0){
+			//alert(stationID+'暂无数据');
+			curSt = $("<div class='curStation'>当前台站：<span>"+stationID+"，暂无数据</span></div>");
+			//newDiv.append(curSt);
+			//chartsDiv.append(newDiv);
+			//return;
+		}else{
+			curSt = $("<div class='curStation'>当前台站：<span>"+stationID+"</span></div>");
+		}
+		newDiv.append(curSt);
+		var charts = $("<div class='chartsDiv'></div>");
+		var hChartDiv = $("<div id='"+stationID+"HCDiv' class='hChartDiv'>");
+		var spanH = $("<span class='floatRight'>水平位移</span>");
+		//var hCanvas=$("<canvas id='"+stationID+"HC'></canvas>");
+		var hCanvas=$("<div class='chartDiv' id='"+stationID+"HC'></div>");
+		hChartDiv.append(spanH);
+		hChartDiv.append(hCanvas);
+		charts.append(hChartDiv);
+		var vChartDiv = $("<div id='"+stationID+"VCDiv' class='vChartDiv'>");
+		var spanV = $("<span class='floatRight'>垂直位移</span>");
+		//var vCanvas=$("<canvas id='"+stationID+"VC'></canvas>");
+		var vCanvas=$("<div class='chartDiv' id='"+stationID+"VC'></div>");
+		vChartDiv.append(spanV);
+		vChartDiv.append(vCanvas);
+		charts.append(vChartDiv);
+		newDiv.append(charts);
+		chartsDiv.append(newDiv);
+		showChart(msg);
+	}
+	function showChart(msg){
+		// 指定图表的配置项和数据
+	    option.title.text='水平位移';
+		option.series[0].data=msg.value.dis2D.dis;
+	    option.series[0].name='水平位移';
+	    option.xAxis[0].data=msg.value.dis2D.time;
+		var horizonChart = echarts.init(document.getElementById(msg.ID+"HC"));
+		horizonChart.setOption(option);
+		chartMap[msg.ID+"HC"] = horizonChart;
+		
+		option.series[0].data=msg.value.z.dis;
+	    option.series[0].name='垂直位移';
+	    option.xAxis[0].data=msg.value.z.time;
+		var verticalChart = echarts.init(document.getElementById(msg.ID+"VC"));
+		verticalChart.setOption(option);
+		chartMap[msg.ID+"VC"] = verticalChart;
+	}
+	
+	setInterval(function(){
+		if(time){
+			//alert('time存在，interval失效。。。');
+			return;
+		}
+		$.ajax({
+			type:"get",
+			url:"http://127.0.0.1:8090/GNSS/getStationsDis2DZ",
+			data:{
+				stations:stations,
+				time:time
+			},
+			dataType:'jsonp',
+			jsonp:'callback',
+			timeout:1000,
+			success:function(msg){
+				if(msg == undefined){
+					alert("暂无数据");
+					return;
+				}
+				refreshStationCharts(msg);
+				
+			},
+			error:function(XMLHttpRequest, textStatus, errorThrown){
+				alert("刷新图表出错了，请联系管理员");
+			}
+		});
+	},2000);
+	function refreshStationCharts(msg){
+		for(var i=0;i<msg.length;i++){
+			refreshChart(msg[i]);
+		}
+	}
+	function refreshChart(msg){
+		// 指定图表的配置项和数据
+	    option.title.text='水平位移';
+		option.series[0].data=msg.value.dis2D.dis;
+	    option.series[0].name='水平位移';
+	    option.xAxis[0].data=msg.value.dis2D.time;
+		//alert(chartMap[msg.ID+"HC"]+"\n"+typeof chartMap[msg.ID+"HC"]);
+	    chartMap[msg.ID+"HC"].setOption(option);
+		
+		option.series[0].data=msg.value.z.dis;
+	    option.series[0].name='垂直位移';
+	    option.xAxis[0].data=msg.value.z.time;
+	    chartMap[msg.ID+"VC"].setOption(option);
+	}
+</script> 
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>  
+<html>  
+<head>  
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">  
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>  
+    <title>地震图件</title>  
+	<script src="js/jquery-3.2.0.min.js"></script>
+
+    <style> 
+    html, body{
+         	width:100%;
+         	margin-left:0px;		
+         	margin-top:0px;
+         	background-color:rgb(256, 256, 256);
+         }
+    #imgsDiv{
+    	width:100%;
+    	
+    }
+    .tNodeDiv{
+    	width:100%;
+    	display:inline-block;
+    }
+    .titleDiv{
+    	height:20px;
+    	background-color:#AAAAAA;
+    	padding-left:10px;
+    } 
+    .imgDiv{
+    	width:100%;
+    	
+    }
+    img{
+    	width:450px;
+    	float:left;
+    	margin:5px;
+    }
+    .imgNote{
+    	width:350px;
+    	float:left;
+    	margin-top:20px;
+    	margin-left:20px;
+    }
+    </style>  
+   
+</head>  
+  
+<body> 
+	<div id="imgsDiv"></div>
+	<script>
+		var eqID = getQueryString("EQID");
+		//alert(eqID);
+		//截取URL参数
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]); return null;
+         }  
+        $.ajax({
+    		type:"post",
+    		url:"http://"+parent.serverIP+":8090/GNSS/GetEQImgs",
+    		data:{
+    			eqID:eqID,
+    		},
+    		dataType:'jsonp',//异步
+    		jsonp:'callback',
+    		success:function(msg){
+    			var imgsArray = new Array();
+    			if(msg == undefined || msg.length == 0){
+    				alert("暂无图片");
+    				return;
+    			}
+    			
+    			var imgsDiv = $("#imgsDiv");
+    			for(var i=0;i<msg.length;i++){
+    				//alert(i+"::\n"+msg[i].timeNode+"\n"+msg[i].imgs[0].name+"\n"+msg[i].imgs[1].name);
+    				//$("#img_"+i).attr("src", "data:image/png;base64,"+msg[i].imgs[0].content);
+    				//$("#img_"+i).attr("width", "300px");
+    				var tNodeDiv = $("<div class='tNodeDiv'></div>");
+    				var titleDiv = $("<div class='titleDiv'>"+msg[i].timeNode+"节点</div>");
+    				tNodeDiv.append(titleDiv);
+    				//每俩新建一个imgDiv
+    				//next...
+    				
+    				var imgDiv;
+    				for(var j=0; j<msg[i].imgs.length;j++){
+    					if(j%2==0){
+    						imgDiv = $("<div class='imgDiv'></div>");
+    						tNodeDiv.append(imgDiv);
+    					}
+	    				var name = msg[i].imgs[j].name;
+    					var img = $("<img id='"+name+"'>");
+	    				img.attr("src","data:image/png;base64,"+msg[i].imgs[j].content);
+	    				img.attr("width", "200px");
+	    				imgDiv.append(img);
+	    				var strNote = "生成时刻："+msg[i].timeNode+"<br>类型：";
+	    				if(name.indexOf("Arrows")>=0){
+	    					strNote+="振幅示意图<br>";
+	    				}else if(name.indexOf("contours")>=0){
+	    					strNote+="等值线图<br>";
+	    				}
+	    				if(name.indexOf("_H_")>=0 || name.indexOf("_h_")>=0){
+	    					strNote+="方向：水平方向<br>";
+	    				}else if(name.indexOf("_V_")>=0 || name.indexOf("_v_")>=0){
+	    					strNote+="方向：垂直方向<br>";
+	    				}
+	    				strNote+="<a href='data:application/octet-stream;base64,"+msg[i].imgs[j].content+"' download='"+name+".png'>download</a>";
+	    				var imgNote = $("<div class='imgNote'>"+strNote+"</div>");
+	    				imgDiv.append(imgNote);
+    				}
+    				imgsDiv.append(tNodeDiv);
+    			}
+    		},
+    		error:function(XMLHttpRequest, textStatus, errorThrown){
+    			//alert(XMLHttpRequest.status+"\n"+XMLHttpRequest.statusText+"\n"+XMLHttpRequest.responseText +"\n"+XMLHttpRequest.readyState+"\n"+textStatus+"\n"+errorThrown);
+    			alert("获取当前地震的图片出错了，请联系管理员");
+    		}
+    	});
+	</script>
+</body>  
+</html>

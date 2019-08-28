@@ -1,0 +1,158 @@
+<!DOCTYPE html>  
+<html>  
+<head>  
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">  
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>  
+    <title>任务列表</title>  
+	<script src="js/jquery-3.2.0.min.js"></script>
+	    
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="css/bootstrap-theme.css" >
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="js/bootstrap.js"></script>
+	<!-- bootstrap-table -->
+	<link rel="stylesheet" href="css/bootstrap-table.css">
+	<script src="js/bootstrap-table.js"></script>
+	<script src="js/bootstrap-table-zh-CN.min.js"></script>
+
+</head>  
+  
+<body> 
+	<div class="container">
+		<div class="col-md-12" >
+		</div>
+		<div class="col-md-12" >
+			<p>任务列表</p>
+		</div>
+		<div class="col-md-12" id="tableDiv" style="overflow:auto;">
+			<table id="taskTable" class="table table-striped table-bordered table-hover">
+			</table>
+		</div>
+	</div> 
+	<script>
+	var clientHeight = parent.getClientHeight();
+	var tableHeight = clientHeight-135;
+	//$("#tableDiv").outerHeight(tableHeight);
+	
+	$(function () {
+		
+	    $('#taskTable').bootstrapTable({
+	       
+	        height:tableHeight,
+	        method:'get',
+	        url:'servlet/GetTaskListServlet',
+	        striped:true,
+	        cache:false,
+	        pagination:true,
+	        sidePagination:"server",
+	        sortable:false,
+	        //queryParams:
+	        //pageNumber:1,
+	        sortOrder:'desc',
+	        pageSize:20,
+	        dataField: 'rows',
+	        paginationLoop:false,
+	        columns:[
+	        	{
+	        		field:'num',
+	        		title:'序号',
+	        		formatter:function (value, row, index){
+	        			return index+1;
+	        		}
+	        	},
+	        	{
+	        		field:'taskID',
+	        		title:'任务ID',
+	        	},
+	        	{
+	        		field:'startTime',
+	        		title:'开始时间',
+	        		formatter:function(value, row, index){
+	        			return value.substring(0,19);
+	        		}
+	        	},
+	        	{
+	        		field:'endTime',
+	        		title:'结束时间',
+	        		formatter:function(value, row, index){
+	        			if(value=="null"){
+	        				return '-';
+	        			}
+	        			return value.substring(0,19);
+	        		}
+	        	},
+	        	{
+	        		field:'state',
+	        		title:'任务状态',
+	        		formatter:function(value, row, index){
+	        			if(value == 'start'){
+	        				return '开始';
+	        			}else if(value == 'end'){
+	        				return '结束';
+	        			}else if(value == 'abandoned'){
+	        				return '放弃';
+	        			}
+	        			return value;
+	        		}
+	        	},
+	        	{
+	        		field:'',
+	        		title:'操作',
+	        		formatter:function(value, row, index){
+	        			if(row.state == 'start'){
+	        				return '<input type="button" value="放弃" onclick=\"abandonTask(\''+row.taskID+'\');\">';
+	        			}
+	        		}
+	        	},
+	        	{
+	        		field:'eqSet',
+	        		title:'地震集',
+	        		formatter:function(value, row, index){
+	        			if(value!=null && value.length>2){
+	        				value = value.substring(1,value.length-1);
+	        				var eqs = value.split(',');
+	        				var res = '';
+	        				for(var i=0;i<eqs.length;i++){
+	        					res+='<div><a href="./detail.html?EQID='+eqs[i]+'">'+eqs[i]+'</a></div>';
+	        				}
+	        				return res;
+	        			}
+	        			return '';
+	        		}
+	        	},
+	        	{
+	        		field:'msg',
+	        		title:'描述'
+	        	}
+	        ]
+	    });
+	});
+	setInterval(function(){  
+		 $('#taskTable').bootstrapTable('refresh',{
+    		 url:'servlet/GetTaskListServlet',
+    		 silent:true
+    	 });
+	},1000);
+	function abandonTask(taskID){
+		$.ajax({
+			type:"get",
+			url:"http://"+parent.serverIP+":8090/GNSS/abandonTask",
+			data:{
+				taskID:taskID
+			},
+			dataType:'jsonp',
+			jsonp:'callback',
+			timeout:1000,
+			success:function(msg){
+				alert(msg.msg);
+			},
+			error:function(){
+				alert("出错了，请联系管理员。");
+			}
+		});
+	}
+	</script>
+</body>  
+</html>

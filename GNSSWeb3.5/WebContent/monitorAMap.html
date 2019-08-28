@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<meta charset="UTF-8">
+<title>数据监控</title>
+<script src="js/jquery-3.2.0.min.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="css/bootstrap.css">
+<!-- Optional theme -->
+<link rel="stylesheet" href="css/bootstrap-theme.css" >
+<!-- Latest compiled and minified JavaScript -->
+<script src="js/bootstrap.js"></script>
+<!-- bootstrap-table -->
+<link rel="stylesheet" href="css/bootstrap-table.css">
+<script src="js/bootstrap-table.js"></script>
+<script src="js/bootstrap-table-zh-CN.min.js"></script>
+<link rel="stylesheet" href="js/arcgis/3.20/esri/css/esri.css">
+<link rel="stylesheet" href="css/monitor.css">
+</head>
+<body>
+	<div class="mainDiv">
+		<div class="left">
+			<div class="leftleft">
+				<div style="margin-top:5px;margin-left:30px;margin-right:30px;">
+					<div>
+						<div class="bt4">地震预警</div>
+						<div class="glines">
+							<div style="text-align:center;margin-top:10px;">
+								<p id="curState">当前没有地震发生</p>
+								<p id="time"></p>
+							</div>
+							<div id="curInfo">
+								<div><span class="tBold">发震时刻：</span><span id="curInfoTime"></span></div>
+								<div><span class="tBold">首台：</span><span id="firstSt"></span></div>
+								<div><span class="tBold">震中位置：</span><span id="curInfoEpic"></span></div>
+								<div><span class="tBold">GPS震级：</span><span id="curInfoGPSMag"></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tBold">MEMS震级：</span><span id="curInfoMEMSMag"></span></div>
+							</div>
+						</div>
+					</div>
+					<div id="NoEQ">
+						<div style="margin-top:50px;">
+							<div class="bt4">历史地震列表</div>
+							<div style="height:660px;padding-left:10px;padding-right:10px;" class="glines">
+								<div style="text-align:right;margin-top:10px;margin-bottom:5px;text-decoration:underline"><a href="EQList.html">查看更多</a></div>
+								<table id="EQsTbl" class="table table-striped table-bordered table-hover"></table>
+							</div>
+						</div>
+					</div>
+					<div id="curEQ">
+						<div class="mtop">
+							<div class="btRed">地震速报</div>
+							<div class="stMsDiv glines" id="stMsDiv">
+								<div id="stMsNum" style="float:left;padding-left:15px;padding-top:5px;"></div>
+								<div style="float:right;padding-right:10px;cursor:pointer;" onclick="closeStMsDiv();"><img src="img/close.png"></div>
+								<div id="stMsTblDiv">
+									<table id="stMsTbl" class="table"></table>
+								</div>
+							</div>
+							<div style="height:400px;" class="glines">
+								<div style="float:left;width:7px;height:398px;padding-top:10px;padding-bottom:10px;">
+									<div style="height:100%;background-color:rgb(167, 167, 167);width:2px;margin-left:5px;"></div>
+								</div>
+								<div class="rps" id="rps">
+								</div>
+							</div>
+						</div>
+						<div class="mtop">
+							<div class="bt4">台站信息</div>
+							<div style="height:190px;" class="glines">
+							    <table id="stationsTbl" class="table table-striped table-bordered table-hover"></table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+				<div style="width:1140px;height:100%;float:left;">
+					<div id="map" style="width:100%;height:100%"></div>
+				</div>
+		<div class="right" id="stations" style="">
+			<ul id="rightTab" class="nav nav-tabs">
+						<li class="active"><a href="#stationsInfo" data-toggle="tab">台站信息</a></li>
+						<li><a href="#stationsList" data-toggle="tab">台站列表</a></li>
+					</ul>
+					<div id="rightTabContent" class="tab-content" style="height:810px;">
+						<div class="tab-pane fade in active" id="stationsInfo" style="background-color:rgb(245, 245, 245);height:810px;">
+							<div class="BLine" style="line-height:28px;background-color:rgb(256, 256, 256);">
+								<p class="lines">基本信息</p>
+								&nbsp;&nbsp;
+								<img src="img/trip-32-blue.png" height="12" width="12">
+								&nbsp;&nbsp;
+					    		<span class="tBold">共计台站：</span><span id="totalNum">*</span>个
+						    	<br>
+						    	&nbsp;&nbsp;
+						    	<img src="img/trip-32-grey.png" height="12" width="12">
+						    	&nbsp;&nbsp;
+						    	<span class="tBold">掉线台站：</span><span id="outlineNum">*</span>个&nbsp;&nbsp;&nbsp;&nbsp;<a id="outlineS" onclick="listStationsInInfoFunc(this.id);">查看详情</a>
+						    	<br>
+						    	&nbsp;&nbsp;
+						    	<img src="img/trip-32-blue.png" height="12" width="12">
+						    	&nbsp;&nbsp;
+						    	<span class="tBold">在线台站：</span><span id="inlineNum">*</span>个&nbsp;&nbsp;&nbsp;&nbsp;<a id="inlineS" onclick="listStationsInInfoFunc(this.id);">查看详情</a>
+						    	<br>
+						    	&nbsp;&nbsp;
+						    	<img src="img/trip-32-orange.png" height="12" width="12">
+						    	&nbsp;&nbsp;
+						    	<span class="tBold">异常台站：</span><span id="overNum">*</span>个&nbsp;&nbsp;&nbsp;&nbsp;<a id="abnormalS" onclick="listStationsInInfoFunc(this.id);">查看详情</a>
+						    	<br>
+					    	</div>
+					    	<br>
+					    	<p id="infoListTitle" class="lines" style="margin-bottom: 0px;"></p>
+					    	<div id="listStationsInInfo" ></div>
+						</div>
+						<div class="tab-pane fade" id="stationsList">
+						</div>
+					</div>
+		</div>
+	</div> 
+<script src="js/echarts.js"></script>
+<script src="js/arcgis/3.20/init.js"></script>
+<script src="js/monitorAMap.js"></script>
+<script src="js/MonitorWarnWithAMap.js"></script>
+</body>
+</html>
