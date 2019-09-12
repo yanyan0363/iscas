@@ -73,9 +73,11 @@ public class EQEventHelper {
 				boolean here2 = eqEvent.isInSpatialZone(station);
 				System.out.println("isInTimeZone:"+here1+", isInSpatialZone:"+here2);
 				if (here1 && here2) {
+					keys.notifyAll();
 					return eqEvent;
 				}
 			}
+			keys.notifyAll();
 		}
 		return null;
 	}

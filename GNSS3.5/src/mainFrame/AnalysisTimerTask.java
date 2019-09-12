@@ -21,7 +21,7 @@ public class AnalysisTimerTask extends TimerTask{
 	public AnalysisTimerTaskRunner myTask= null ;
 	@Override
 	public void run() {
-//		long t1 = System.nanoTime()/1000000;
+		long t1 = System.nanoTime()/1000000;
 		if(myTask == null )
 			return ;
 		try{
@@ -38,8 +38,8 @@ public class AnalysisTimerTask extends TimerTask{
 			System.out.println("timer evt worker error");
 			exp.printStackTrace();
 		}
-//		long t2 = System.nanoTime()/1000000;
-//		System.out.println("                                                                 AnalysisTimerTask 耗时 -- " + (t2-t1)+"ms");
+		long t2 = System.nanoTime()/1000000;
+		System.out.println("                                                                 AnalysisTimerTask 耗时 -- " + (t2-t1)+"ms");
 	
 		System.gc();
 	}
@@ -65,6 +65,7 @@ public class AnalysisTimerTask extends TimerTask{
 						synchronized (event.triggerSt) {
 							event.triggerSt.add(curStation);
 //							event.f3TriggerStDate.put(curStation, new Date());
+							event.triggerSt.notifyAll();
 						}
 						GNSSFrame.eqEvents.put(event.getEqEventID(), event);
 						//here...首台信息发送至SD，待添加
@@ -80,6 +81,7 @@ public class AnalysisTimerTask extends TimerTask{
 									boolean areportRes = event.createAReport(curStation);
 									System.out.println("速报："+areportRes);
 								}
+								event.triggerSt.notifyAll();
 							}
 						}
 						if (event.triggerSt.size() == 5 && !event.isEndDealed()) {

@@ -5,6 +5,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.esri.arcgis.geoprocessing.tools.datamanagementtools.RemoveDomainFromField;
+
 import baseObject.BaseStation;
 import beans.MEMSData;
 import mainFrame.GNSSFrame;
@@ -40,6 +42,11 @@ public class DataCache {
 		int i = (int)Math.ceil(Config.ltw);
 		while (i < size) {
 			DispWithMEMS dispWithMEMS = myDataList.get(i);
+			if (dispWithMEMS == null) {
+				i++;
+				System.out.println("isTriggeredAsc -- dispWithMEMS == null");
+				continue;
+			}
 			List<MEMSData> memsDataList = dispWithMEMS.memsDataList;
 			if (memsDataList == null || memsDataList.size() <= 0) {
 				i++;
@@ -197,6 +204,7 @@ public class DataCache {
 				}
 			}
 			lastMems = null;
+			myDataList.notifyAll();
 		}
 //		System.out.println("if trigger: false " + this.myStation.ID);
 		long t2 = System.nanoTime()/1000000;
@@ -464,6 +472,7 @@ public class DataCache {
 						tmpList.add(memsDatas.get(i));
 					}
 				}
+				memsDatas.notifyAll();
 			}
 			memsDataList.addAll(tmpList);//顺序无关
 			lastDisIdx--;
@@ -540,6 +549,7 @@ public class DataCache {
 					}
 //					Collections.copy(tmpList, displacement.memsDataList.subList(0, lastMemsIdx+1));
 				}
+				displacement.notifyAll();
 			}
 			memsDataList.addAll(tmpList);//顺序无关
 			lastDisIdx--;
@@ -595,6 +605,7 @@ public class DataCache {
 					}
 				}
 			}
+			displacement.notifyAll();
 		}
 		return true;
 	}
@@ -725,6 +736,7 @@ public class DataCache {
 		Displacement displacement = null;
 		synchronized (myDataList) {
 			displacement = this.myDataList.get(this.myDataList.size()-1) ;
+			myDataList.notifyAll();
 		}
 		return displacement;
 	}
@@ -849,6 +861,7 @@ public class DataCache {
 				}
 			}
 			this.myDataList.add(d) ;
+			myDataList.notifyAll();
 		}
 		return ; 
 	}
@@ -869,7 +882,7 @@ public class DataCache {
 	/**
 	 * 维护myDataList的时间窗口
 	 */
-	synchronized private void maintainMyDataListTimeWindow(){
+	 private void maintainMyDataListTimeWindow(){
 		synchronized (myDataList) {
 //			System.out.println("maintainMyDataListTimeWindow before -- "+myStation.ID+" -- "+myDataList.size());
 			if (myDataList.size() <= 0) {
@@ -883,19 +896,32 @@ public class DataCache {
 				if(myDataList.size() <=0 )
 					break ; 
 				DispWithMEMS d1 = myDataList.get(0) ;
-				long t1 = d1.localTime.getTime() ;
-				if((t2-t1)/1000 > timeWindow || (t3 - t1)/1000 > timeWindow){
+//				if (d1 == null) {
+//					break;
+//				}
+				try {
+					long t1 = d1.localTime.getTime() ;//here java.lang.NullPointerException
+					if((t2-t1)/1000 > timeWindow || (t3 - t1)/1000 > timeWindow){
+						myDataList.remove(0) ;
+						d1.dispose();
+						d1 = null ;
+					}
+					else break ;
+				} catch (NullPointerException e) {
+					e.printStackTrace();
+					//若异常,则清除
 					myDataList.remove(0) ;
 					d1.dispose();
 					d1 = null ;
+					continue;
 				}
-				else break ;
 			}
 			System.gc();
 //			System.out.println("maintainMyDataListTimeWindow after -- "+myDataList.size());
 //			System.out.println("maintainMyDataListTimeWindow 耗时  -- "+(System.nanoTime()/1000000-t3)+"ms");
 			t2 = 0;
 			t3 = 0;
+			myDataList.notifyAll();
 		}
 	}
 	/**
@@ -910,6 +936,7 @@ public class DataCache {
 				 if (GNSSFrame.myStations.containsKey(this.myStation.ID)) {
 					 GNSSFrame.myStations.remove(this.myStation.ID);
 				 }
+				 GNSSFrame.myStations.notifyAll();
 				 return true;
 			}
 		 }

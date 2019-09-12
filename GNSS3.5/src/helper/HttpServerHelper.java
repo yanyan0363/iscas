@@ -100,17 +100,20 @@ public class HttpServerHelper {
 									builder.deleteCharAt(builder.lastIndexOf(","));
 								}
 							}
+							aReports.notifyAll();
 						}
 						builder.append("]},");
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
+					eqEvent.notifyAll();
 				}
 			}
 			if (builder.lastIndexOf(",") == builder.length()-1) {
 				builder.deleteCharAt(builder.lastIndexOf(","));
 			}
 			builder.append("]");
+			eqEv.notifyAll();
 		}
 		return packCallBack(callback, builder.toString());
 	}

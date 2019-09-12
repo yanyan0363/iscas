@@ -117,7 +117,7 @@ public class MEMSFileIOHelper {
 			System.gc();
 		}
 		catch(Exception exp){
-			
+			exp.printStackTrace();
 		}
 //		System.out.println("after checkFileIO, "+fileIO.size()+"::"+fileIO.keySet());
 	}

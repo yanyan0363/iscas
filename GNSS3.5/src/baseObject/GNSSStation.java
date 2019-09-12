@@ -211,6 +211,7 @@ public class GNSSStation extends BaseStation {
 							GPSEW.append("{\"name\":\""+tString+"\",\"value\":[\""+tString+"\","+String.format("%.3f", dispWithMEMS.xDisplacement)+"]},");
 							GPSNS.append("{\"name\":\""+tString+"\",\"value\":[\""+tString+"\","+String.format("%.3f", dispWithMEMS.yDisplacement)+"]},");
 							GPSZ.append("{\"name\":\""+tString+"\",\"value\":[\""+tString+"\","+String.format("%.3f", dispWithMEMS.zDisplacement)+"]},");
+							dispWithMEMS.notifyAll();
 						}
 					}
 					List<MEMSData> memslist = dispWithMEMS.memsDataList;
@@ -227,6 +228,7 @@ public class GNSSStation extends BaseStation {
 							MEMSEWAcc.append("{\"name\":\""+tString+"\",\"value\":"+"[\""+tString+"\","+String.format("%.3f", memsData.accE)+"]},");
 							MEMSNSAcc.append("{\"name\":\""+tString+"\",\"value\":"+"[\""+tString+"\","+String.format("%.3f", memsData.accN)+"]},");
 							MEMSZAcc.append("{\"name\":\""+tString+"\",\"value\":"+"[\""+tString+"\","+String.format("%.3f", memsData.accH)+"]},");
+							memsData.notifyAll();
 						}
 						
 					}
@@ -314,6 +316,7 @@ public class GNSSStation extends BaseStation {
 							GPSEW.append("{\"name\":\""+tString+"\",\"value\":[\""+tString+"\","+String.format("%.3f", dispWithMEMS.xDisplacement)+"]},");
 							GPSNS.append("{\"name\":\""+tString+"\",\"value\":[\""+tString+"\","+String.format("%.3f", dispWithMEMS.yDisplacement)+"]},");
 							GPSZ.append("{\"name\":\""+tString+"\",\"value\":[\""+tString+"\","+String.format("%.3f", dispWithMEMS.zDisplacement)+"]},");
+							dispWithMEMS.notifyAll();
 						}
 					}
 					List<MEMSData> memslist = dispWithMEMS.memsDataList;
@@ -347,6 +350,7 @@ public class GNSSStation extends BaseStation {
 								MEMSEWAcc.append("{\"name\":\""+tString+"\",\"value\":"+"[\""+tString+"\","+String.format("%.3f", memsData.accE)+"]},");
 								MEMSNSAcc.append("{\"name\":\""+tString+"\",\"value\":"+"[\""+tString+"\","+String.format("%.3f", memsData.accN)+"]},");
 								MEMSZAcc.append("{\"name\":\""+tString+"\",\"value\":"+"[\""+tString+"\","+String.format("%.3f", memsData.accH)+"]},");
+								memsData.notifyAll();
 							}
 						}
 					}
@@ -464,6 +468,7 @@ public class GNSSStation extends BaseStation {
 							GPSEW.append("{\"name\":\""+tString+"\",\"value\":[\""+tString+"\","+String.format("%.3f", dispWithMEMS.xDisplacement)+"]},");
 							GPSNS.append("{\"name\":\""+tString+"\",\"value\":[\""+tString+"\","+String.format("%.3f", dispWithMEMS.yDisplacement)+"]},");
 							GPSZ.append("{\"name\":\""+tString+"\",\"value\":[\""+tString+"\","+String.format("%.3f", dispWithMEMS.zDisplacement)+"]},");
+							dispWithMEMS.notifyAll();
 						}
 					}
 					List<MEMSData> memslist = dispWithMEMS.memsDataList;
@@ -508,6 +513,7 @@ public class GNSSStation extends BaseStation {
 								if (Math.abs(maxAbsH) < Math.abs(memsData.getH())) {
 									maxAbsH = memsData.getH();
 								}
+								memsData.notifyAll();
 							}
 						}
 					}
@@ -621,6 +627,7 @@ public class GNSSStation extends BaseStation {
 							GPSEW.append("{\"name\":\""+tString+"\",\"value\":[\""+tString+"\","+String.format("%.3f", dispWithMEMS.xDisplacement)+"]},");
 							GPSNS.append("{\"name\":\""+tString+"\",\"value\":[\""+tString+"\","+String.format("%.3f", dispWithMEMS.yDisplacement)+"]},");
 							GPSZ.append("{\"name\":\""+tString+"\",\"value\":[\""+tString+"\","+String.format("%.3f", dispWithMEMS.zDisplacement)+"]},");
+							dispWithMEMS.notifyAll();
 						}
 					}
 					List<MEMSData> memslist = dispWithMEMS.memsDataList;
@@ -658,6 +665,7 @@ public class GNSSStation extends BaseStation {
 								if (Math.abs(maxAbsH) < Math.abs(memsData.getH())) {
 									maxAbsH = memsData.getH();
 								}
+								memsData.notifyAll();
 							}
 						}
 					}

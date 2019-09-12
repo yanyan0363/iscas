@@ -278,6 +278,7 @@ public class EQEvent {
 						stationMaxVDis.put(baseStation.ID, maxVDis);
 					}
 				}
+				triggerSt.notifyAll();
 			}
 			tNode = (nextLong - eqTLong)/1000 + "s"; 
 			boolean resArrow = ArcgisShpHelper.createArrows(eqInfo.getEQID(), tNode, stationMaxHDis, stationMaxVDis);
@@ -444,64 +445,63 @@ public class EQEvent {
 			if (eqEv.containsKey(this.getEqEventID())) {
 				eqEv.remove(this.getEqEventID());	 
 			}
+			eqEv.notifyAll();
 		}
-		synchronized (this) {
-			synchronized (triggerSt) {
-				Iterator<BaseStation> stations = triggerSt.iterator();
-				while (stations.hasNext()) {
-					BaseStation baseStation = (BaseStation) stations.next();
-					boolean flag = false;
-					//判断当前station是否活跃于其它EQEvent，若活跃于其它EQEvent，则不清除数据
-					Enumeration<EQEvent> eqEvents = FrameRunner.iFrame.eqEvents.elements();
-					while (eqEvents.hasMoreElements()) {
-						EQEvent otherEQEvent = (EQEvent) eqEvents.nextElement();
-						if (this.equals(otherEQEvent)) {
-							continue;
-						}
-						if (otherEQEvent.triggerSt.contains(baseStation)) {
-							flag = true;
-							break;
-						}
-					}
-					if(flag){
+		synchronized (triggerSt) {
+			Iterator<BaseStation> stations = triggerSt.iterator();
+			while (stations.hasNext()) {
+				BaseStation baseStation = (BaseStation) stations.next();
+				boolean flag = false;
+				//判断当前station是否活跃于其它EQEvent，若活跃于其它EQEvent，则不清除数据
+				Enumeration<EQEvent> eqEvents = FrameRunner.iFrame.eqEvents.elements();
+				while (eqEvents.hasMoreElements()) {
+					EQEvent otherEQEvent = (EQEvent) eqEvents.nextElement();
+					if (this.equals(otherEQEvent)) {
 						continue;
-					}else{
-						baseStation.isActive = false;
-						baseStation.myDataCache.maintainTimeWindow();
-						System.gc();
+					}
+					if (otherEQEvent.triggerSt.contains(baseStation)) {
+						flag = true;
+						break;
 					}
 				}
-				if (isEndDealed) {
-					GNSSDBHelper.endEQ(this.eqInfo.getEQID());
+				if(flag){
+					continue;
+				}else{
+					baseStation.isActive = false;
+					baseStation.myDataCache.maintainTimeWindow();
+					System.gc();
 				}
-				
-				this.eqInfo.dispose();
-				this.eqInfo = null;
-				this.firstStation = null;
-				synchronized (aReportList) {
-					ListIterator<AReport> iterator = aReportList.listIterator();
-					while (iterator.hasNext()) {
-						AReport aReport = iterator.next();
-						iterator.remove();
-						aReport.dispose();
-						aReport = null;
-					}
-					aReportList.clear();
-					aReportList = null;
-				}
-				firstTriggerTime = null;
-				firstStation = null;
-				stationMaxHDis.clear();
-				stationMaxHDis = null;
-				stationMaxVDis.clear();
-				stationMaxVDis = null;
-				triggerSt.clear();
-				
-				this.eqEventID = null;
-				this.triggerSt = null;
-				this.stMEMSMagMap.clear();
-				this.stMEMSMagMap = null;
 			}
+			if (isEndDealed) {
+				GNSSDBHelper.endEQ(this.eqInfo.getEQID());
+			}
+			
+			this.eqInfo.dispose();
+			this.eqInfo = null;
+			this.firstStation = null;
+			synchronized (aReportList) {
+				ListIterator<AReport> iterator = aReportList.listIterator();
+				while (iterator.hasNext()) {
+					AReport aReport = iterator.next();
+					iterator.remove();
+					aReport.dispose();
+					aReport = null;
+				}
+				aReportList.clear();
+				aReportList = null;
+			}
+			firstTriggerTime = null;
+			firstStation = null;
+			stationMaxHDis.clear();
+			stationMaxHDis = null;
+			stationMaxVDis.clear();
+			stationMaxVDis = null;
+			triggerSt.clear();
+			
+			this.eqEventID = null;
+			this.triggerSt = null;
+			this.stMEMSMagMap.clear();
+			this.stMEMSMagMap = null;
 		}
 		System.out.println("putEqEventNotActive after remove:" + FrameRunner.iFrame.eqEvents.size());
 	}

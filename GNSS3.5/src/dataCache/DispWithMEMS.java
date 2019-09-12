@@ -10,9 +10,9 @@ import beans.MEMSData;
 public class DispWithMEMS extends Displacement {
 
 	public List<MEMSData> memsDataList = new ArrayList<>();
-	private DispWithMEMS() {
-		
-	}
+//	private DispWithMEMS() {
+//		
+//	}
 	public void dispose(){
 		super.dispose();
 		if(memsDataList != null){

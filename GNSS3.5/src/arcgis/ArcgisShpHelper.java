@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.http.impl.conn.tsccm.WaitingThread;
+
 import com.esri.arcgis.carto.IFeatureLayer;
 import com.esri.arcgis.datasourcesfile.ShapefileWorkspaceFactory;
 import com.esri.arcgis.geodatabase.IFeature;
@@ -360,6 +362,7 @@ public class ArcgisShpHelper {
 					feature.store();
 					feature = null;
 				}
+				triggerSt.notifyAll();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

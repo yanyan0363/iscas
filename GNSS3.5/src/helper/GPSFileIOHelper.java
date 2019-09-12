@@ -60,6 +60,7 @@ public class GPSFileIOHelper {
 					fWriter = initFileWriter(stationID, fileName);
 				}
 			}
+			fileIO.notifyAll();
 		}
 		gpsLine = null;
 		fWriter = null;
