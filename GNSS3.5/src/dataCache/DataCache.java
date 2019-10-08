@@ -674,7 +674,8 @@ public class DataCache {
 				tmp.set(Calendar.MILLISECOND, 0);
 				time = tmp.getTime();
 				List<DispWithMEMS> dispList = this.myDataList;
-				if (dispList == null || dispList.size() == 0) {
+				int size = 0;
+				if (dispList == null || (size=dispList.size()) == 0) {
 					DispWithMEMS displacement = new DispWithMEMS(this, time);
 					dispList.add(displacement);
 					tmp = null;
@@ -682,7 +683,7 @@ public class DataCache {
 					return displacement;
 				}
 //				synchronized (dispList) {
-					int size = dispList.size();
+//					int size = dispList.size();
 					int cmp = dispList.get(size-1).time.compareTo(time);
 					if (cmp == 0) {
 						return dispList.get(size-1);
