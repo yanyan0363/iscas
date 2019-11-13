@@ -256,7 +256,7 @@ public class HandleMEMSNIOReadThread extends Thread{
 		 try {
 			 memsData.accE = Double.parseDouble(messages[MEMSMetaData.accEIdx]);
 			 memsData.accN = Double.parseDouble(messages[MEMSMetaData.accNIdx]);
-			 memsData.accH = Double.parseDouble(messages[MEMSMetaData.accHIdx]);
+			 memsData.accH = Double.parseDouble(messages[MEMSMetaData.accUIdx]);
 			 if (messages.length >= 6) {
 				 memsData.token = messages[MEMSMetaData.tokenIdx];
 			 }
@@ -293,13 +293,13 @@ public class HandleMEMSNIOReadThread extends Thread{
 				|| MEMSMetaData.timeIdx >= messages.length-1 
 				|| MEMSMetaData.accEIdx >= messages.length-1
 				|| MEMSMetaData.accNIdx >= messages.length-1
-				|| MEMSMetaData.accHIdx >= messages.length-1){
+				|| MEMSMetaData.accUIdx >= messages.length-1){
 			 System.out.println("MEMS数据行格式不匹配：：" + messages.length);
 			 return null;
 		 }
 		if (StringHelper.isNumeric(messages[MEMSMetaData.accEIdx])
 				&& StringHelper.isNumeric(messages[MEMSMetaData.accNIdx])
-				&& StringHelper.isNumeric(messages[MEMSMetaData.accHIdx])
+				&& StringHelper.isNumeric(messages[MEMSMetaData.accUIdx])
 				&& messages.length == 6) {
 			return messages;
 		 }else{

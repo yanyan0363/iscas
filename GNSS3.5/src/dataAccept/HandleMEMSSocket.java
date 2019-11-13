@@ -140,7 +140,7 @@ public class HandleMEMSSocket extends Thread{
  				|| MEMSMetaData.timeIdx >= messages.length-1 
  				|| MEMSMetaData.accEIdx >= messages.length-1
  				|| MEMSMetaData.accNIdx >= messages.length-1
- 				|| MEMSMetaData.accHIdx >= messages.length-1){
+ 				|| MEMSMetaData.accUIdx >= messages.length-1){
 			 System.out.println("MEMS数据行格式不匹配：：" + messages.length);
 			 return false;
 		 }
@@ -163,10 +163,10 @@ public class HandleMEMSSocket extends Thread{
 			 }else{
 				 System.out.println("accN错误：："+messages[MEMSMetaData.accNIdx]);
 			 }
-			 if (StringHelper.isNumeric(messages[MEMSMetaData.accHIdx])) {
-				 memsData.accH = Double.parseDouble(messages[MEMSMetaData.accHIdx]);
+			 if (StringHelper.isNumeric(messages[MEMSMetaData.accUIdx])) {
+				 memsData.accH = Double.parseDouble(messages[MEMSMetaData.accUIdx]);
 			 }else{
-				 System.out.println("accH错误：："+messages[MEMSMetaData.accHIdx]);
+				 System.out.println("accH错误：："+messages[MEMSMetaData.accUIdx]);
 			 }
 			 if (messages.length >= 6) {
 				 memsData.token = messages[MEMSMetaData.tokenIdx];

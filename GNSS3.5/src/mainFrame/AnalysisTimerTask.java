@@ -21,7 +21,7 @@ public class AnalysisTimerTask extends TimerTask{
 	public AnalysisTimerTaskRunner myTask= null ;
 	@Override
 	public void run() {
-		long t1 = System.nanoTime()/1000000;
+		long t1 = System.currentTimeMillis();
 		if(myTask == null )
 			return ;
 		try{
@@ -38,7 +38,7 @@ public class AnalysisTimerTask extends TimerTask{
 			System.out.println("timer evt worker error");
 			exp.printStackTrace();
 		}
-		long t2 = System.nanoTime()/1000000;
+		long t2 = System.currentTimeMillis();
 		System.out.println("                                                                 AnalysisTimerTask 耗时 -- " + (t2-t1)+"ms");
 	
 		System.gc();

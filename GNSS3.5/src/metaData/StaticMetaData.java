@@ -259,7 +259,8 @@ public class StaticMetaData {
 	public static Set<String> getSDStIDSet() {
 		return SDStIDSet;
 	}
-	public static void setSDStIDSet(Set<String> sDStIDSet) {
-		SDStIDSet = sDStIDSet;
+	public static void updateSDStIDSet(Set<String> sDStIDSet) {
+		SDStIDSet.clear();
+		sDStIDSet.addAll(sDStIDSet);
 	}
 }

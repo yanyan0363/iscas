@@ -83,7 +83,7 @@ public class DataCache {
 //		if (this.myStation.ID.equalsIgnoreCase("SMMNX")) {
 //			return false;
 //		}
-		long t1 = System.nanoTime()/1000000;
+		long t1 = System.currentTimeMillis();
 		synchronized (myDataList) {
 			int disIdx = myDataList.size() - 1;
 			if (disIdx < 0 || disIdx < Config.ltw ) {

@@ -63,9 +63,7 @@ public class SDHttpHelper {
 		String evtID = "evt-"+now.getTime();
 		System.out.println("evtID:"+evtID);
 		StaticMetaData.setSDEvtID(evtID);
-		StaticMetaData.getSDStIDSet().clear();
-//		StaticMetaData.setSDStIDSet(curSDStIDSet);
-		StaticMetaData.setSDStIDSet(set);
+		StaticMetaData.updateSDStIDSet(set);
 		endAllGPSTask();
 //		boolean resultJson = SendSDHttpJson(Config.SDToken, firstST, curSDStIDSet, new Date(), blh.L, blh.B, blh.H, evtID, "start");
 		boolean resultJson = SendSDHttpJson(Config.SDToken, firstST, set, new Date(), blh.L, blh.B, blh.H, evtID, "start");
