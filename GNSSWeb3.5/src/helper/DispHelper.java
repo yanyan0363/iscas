@@ -62,53 +62,62 @@ public class DispHelper {
 		boolean resMEMS = checkStFolder(gpsFolder, stationID);
 		if (!resGPS) {
 			System.out.println("GPS Folder does not exist, return false.");
-			return "{}";
-		}
-		String line = null;
-		boolean endFlag = false;
-		Date curFileT = startT;
-		while (!endFlag) {
-			readerGPS = getReader(gpsFolder, stationID, curFileT,fileReaderGPS);
-			readerMEMS = getReader(memsFolder, stationID, curFileT,fileReaderMEMS);
-			try {
-				while ((line = readerGPS.readLine()) != null && line != "") {
-					String[] items = line.split(",");
-					if (items.length != 9) {
+//			return "{}";
+		}else {
+			String line = null;
+			boolean endFlag = false;
+			Date curFileT = startT;
+			while (!endFlag) {
+				readerGPS = getReader(gpsFolder, stationID, curFileT,fileReaderGPS);
+				if (readerGPS == null) {
+					if (curFileT != endT) {
+						curFileT = endT;
 						continue;
-					}
-					String tString = items[1];//.substring(0, 19);
-					try {
-						Date curT = formatMs2.parse(tString);
-						if (curT.before(startT)) {
-							continue;
-						}
-						if (curT.after(endT)) {
-							endFlag = true;
-							break;
-						}
-						double dx = Double.parseDouble(items[5]);
-						double dy = Double.parseDouble(items[6]);
-						double dz = Double.parseDouble(items[7]);
-						//GPS
-						GPSEW.append("{\"name\":\""+tString+"\",\"value\":[\""+tString+"\","+String.format("%.3f", dx)+"]},");
-						GPSNS.append("{\"name\":\""+tString+"\",\"value\":[\""+tString+"\","+String.format("%.3f", dy)+"]},");
-						GPSZ.append("{\"name\":\""+tString+"\",\"value\":[\""+tString+"\","+String.format("%.3f", dz)+"]},");
-						//MEMS拟合
-						boolean memsRes = getMemsNiheData(readerMEMS, curT, stationID, dx, dy, dz, MEMSEW, MEMSNS, MEMSZ);
-						if (!memsRes) {
-							System.out.println("读取MEMS数据拟合出错");
-						}
-					} catch (ParseException e) {
-						e.printStackTrace();
+					}else {
+						break;
 					}
 				}
-			} catch (IOException e) {
-				e.printStackTrace();
-				return "{}";
+				readerMEMS = getReader(memsFolder, stationID, curFileT,fileReaderMEMS);
+				try {
+					while ((line = readerGPS.readLine()) != null && line != "") {
+						String[] items = line.split(",");
+						if (items.length != 9) {
+							continue;
+						}
+						String tString = items[1];//.substring(0, 19);
+						try {
+							Date curT = formatMs2.parse(tString);
+							if (curT.before(startT)) {
+								continue;
+							}
+							if (curT.after(endT)) {
+								endFlag = true;
+								break;
+							}
+							double dx = Double.parseDouble(items[5]);
+							double dy = Double.parseDouble(items[6]);
+							double dz = Double.parseDouble(items[7]);
+							//GPS
+							GPSEW.append("{\"name\":\""+tString+"\",\"value\":[\""+tString+"\","+String.format("%.3f", dx)+"]},");
+							GPSNS.append("{\"name\":\""+tString+"\",\"value\":[\""+tString+"\","+String.format("%.3f", dy)+"]},");
+							GPSZ.append("{\"name\":\""+tString+"\",\"value\":[\""+tString+"\","+String.format("%.3f", dz)+"]},");
+							//MEMS拟合
+							boolean memsRes = getMemsNiheData(readerMEMS, curT, stationID, dx, dy, dz, MEMSEW, MEMSNS, MEMSZ);
+							if (!memsRes) {
+								System.out.println("读取MEMS数据拟合出错");
+							}
+						} catch (ParseException e) {
+							e.printStackTrace();
+						}
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+//					return "{}";
+				}
+				closeReader(fileReaderGPS, readerGPS);
+				closeReader(fileReaderMEMS, readerMEMS);
+				curFileT = endT;
 			}
-			closeReader(fileReaderGPS, readerGPS);
-			closeReader(fileReaderMEMS, readerMEMS);
-			curFileT = endT;
 		}
 		getMEMSData(stationID, memsFolder, startT, endT, MEMSEWAcc, MEMSNSAcc, MEMSZAcc);
 		if (GPSEW.lastIndexOf(",")>0) {
