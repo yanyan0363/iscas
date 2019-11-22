@@ -329,7 +329,7 @@ function initChartsData(sid,PT){
 		    ZMEMSChart.setOption(option);
 		},
 		error:function(XMLHttpRequest, textStatus, errorThrown){
-			alert("图表刷新出错了，请联系管理员");
+			alert("初始化折线图出错了，请联系管理员");
 		}
 			});
 }
